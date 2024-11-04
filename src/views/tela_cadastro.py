@@ -1,5 +1,4 @@
 from customtkinter import *
-from . import app
 
 def mostrar_tela_cadastro(app, login_frame):
     
