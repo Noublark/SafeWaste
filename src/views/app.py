@@ -3,8 +3,9 @@ from customtkinter import *
 from . import tela_login
 
 
-set_appearance_mode("Dark")
+set_appearance_mode("White")
 set_default_color_theme("src/resources/theme/DaynNight.json")
+
 
 app = CTk()
 app.title("SafeWaste")
@@ -25,7 +26,7 @@ def app_start():
     img = img.resize((320, 300), Image.LANCZOS) 
     img_tk = ImageTk.PhotoImage(img)
 
-    img_label = CTkLabel(frame_inicial, image=img_tk, fg_color="black", text="")
+    img_label = CTkLabel(frame_inicial, image=img_tk, text="")
     img_label.image = img_tk
     img_label.place(relx=0.5, rely=0.4, anchor="center")
 
