@@ -20,7 +20,7 @@ def app_start():
     global frame_inicial
     frame_inicial = CTkFrame(master=app, fg_color="black", border_color="black")
     frame_inicial.pack(fill= BOTH, expand=TRUE)
-    app.bind("<Button-1>", lambda event: tela_login.mostrar_tela_login(app, frame_inicial))
+    app.bind("<Button-1>", lambda event: tela_login.mostrar_tela_login(app, frame_inicial, img_label))
 
     img = Image.open("img_teste.png")
     img = img.resize((320, 300), Image.LANCZOS) 

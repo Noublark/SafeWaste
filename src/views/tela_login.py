@@ -3,9 +3,10 @@ import tkinter
 from . import tela_cadastro, tela_redefinir_senha, tela_home
 from PIL import Image, ImageTk
 
-def mostrar_tela_login(app, frame_inicial):
+def mostrar_tela_login(app, frame, img_label):
     app.unbind("<Button-1>")
-    frame_inicial.pack_forget()
+    frame.pack_forget()
+    img_label.place_forget() 
 
     global login_frame
     login_frame = CTkFrame(master=app, width=400, height=605, corner_radius=15, border_color="")
@@ -29,17 +30,17 @@ def mostrar_tela_login(app, frame_inicial):
     campo_senha.place(x=40, y=290)
 
     hyperlink_redefinir_senha = CTkLabel(login_frame, text="Esqueceu a senha?", text_color="lightblue", cursor="hand2")
-    hyperlink_redefinir_senha.bind("<Button-1>", lambda event: tela_redefinir_senha.mostrar_tela_redefinir_senha(app, login_frame))
+    hyperlink_redefinir_senha.bind("<Button-1>", lambda event: tela_redefinir_senha.mostrar_tela_redefinir_senha(app, login_frame, img_label))
     hyperlink_redefinir_senha.place(x=250, y=320)
 
-    btn_login = CTkButton(master=login_frame, text="Entrar", command=lambda: tela_home.mostrar_tela_home(app, login_frame), corner_radius=10, fg_color= "#985698", hover_color="#ee82ee", width=330)
+    btn_login = CTkButton(master=login_frame, text="Entrar", command=lambda: tela_home.mostrar_tela_home(app, login_frame, img_label), corner_radius=10, fg_color= "#985698", hover_color="#ee82ee", width=330)
     btn_login.place(x=40, y=370)
 
     label = CTkLabel(login_frame, text="Não tem uma conta?", font=('Century Ghotic', 12))
     label.place(x=40, y=410)
 
     hyperlink_cadastro = CTkLabel(login_frame, text="Cadastre-se", text_color="lightblue", cursor="hand2")
-    hyperlink_cadastro.bind("<Button-1>", lambda event: tela_cadastro.mostrar_tela_cadastro(app, login_frame))
+    hyperlink_cadastro.bind("<Button-1>", lambda event: tela_cadastro.mostrar_tela_cadastro(app, login_frame, img_label))
     hyperlink_cadastro.place(x=160, y=410)
     
 

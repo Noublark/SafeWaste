@@ -3,9 +3,10 @@ import tkinter
 from PIL import Image, ImageTk
 from . import tela_login
 
-def mostrar_tela_cadastro(app, login_frame):
+def mostrar_tela_cadastro(app, frame, img_label):
     
-    login_frame.pack_forget()
+    frame.place_forget()
+    img_label.place_forget() 
 
     img_voltar = Image.open("src/resources/static/back arrow.png")
     img_voltar = img_voltar.resize((40, 50), Image.LANCZOS)
@@ -13,12 +14,20 @@ def mostrar_tela_cadastro(app, login_frame):
 
     img_label_voltar = CTkLabel(app, image=img_tk, text="", cursor="hand2")
     img_label_voltar.image = img_tk
-    img_label_voltar.bind("<Button-1>", lambda event: voltar(app, cadastro_frame, img_label_voltar))
+    img_label_voltar.bind("<Button-1>", lambda event: voltar(app, cadastro_frame, img_label, img_label_voltar))
     img_label_voltar.place(x=20, y=20)
 
     global cadastro_frame
     cadastro_frame = CTkFrame(master=app, width=400, height=605, corner_radius=15, border_color="")
     cadastro_frame.place(relx=1.0, rely= 0.5, anchor=tkinter.E)
+
+    img = Image.open("img_teste.png")
+    img = img.resize((220, 200), Image.LANCZOS) 
+    img_tk = ImageTk.PhotoImage(img)
+
+    img_label = CTkLabel(app, image=img_tk, text="")
+    img_label.image = img_tk
+    img_label.place(relx=0.12, rely=0.5, anchor=tkinter.W) 
 
     titulo = CTkLabel(cadastro_frame, text="Cadastro", font=('Century Ghotic', 32))
     titulo.place(x=145, y=130)
@@ -54,8 +63,8 @@ def marcacao_checkbox(checkbox_marcada, outra_checkbox):
         outra_checkbox.set(0)
 
 
-def voltar(app, cadastro_frame, img_label_voltar):
+def voltar(app, frame, img_label, img_label_voltar):
 
-    cadastro_frame.place_forget()
+    frame.place_forget()
     img_label_voltar.place_forget()
-    tela_login.mostrar_tela_login(app, cadastro_frame)
+    tela_login.mostrar_tela_login(app, frame, img_label)
