@@ -3,17 +3,17 @@ from customtkinter import *
 from . import tela_login
 
 
-set_appearance_mode("White")
+set_appearance_mode("dark")
 set_default_color_theme("src/resources/theme/DaynNight.json")
 
 
 app = CTk()
 app.title("SafeWaste")
 
-largura, altura = 800, 600
-pos_x = (app.winfo_screenwidth() - largura) // 2
-pos_y = (app.winfo_screenheight() - altura) // 2
-app.geometry(f"{largura}x{altura}+{pos_x}+{pos_y}")
+width, height = 800, 600
+pos_x = (app.winfo_screenwidth() - width) // 2
+pos_y = (app.winfo_screenheight() - height) // 2
+app.geometry(f"{width}x{height}+{pos_x}+{pos_y}")
 
 def app_start():
 
