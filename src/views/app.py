@@ -17,6 +17,9 @@ app.geometry(f"{width}x{height}+{pos_x}+{pos_y}")
 
 def app_start():
 
+    for widget in app.winfo_children():
+        widget.destroy()
+
     global frame_inicial
     frame_inicial = CTkFrame(master=app, fg_color="black", border_color="black")
     frame_inicial.pack(fill= BOTH, expand=TRUE)
@@ -28,9 +31,8 @@ def app_start():
 
     img_label = CTkLabel(frame_inicial, image=img_tk, text="")
     img_label.image = img_tk
-    img_label.place(relx=0.5, rely=0.4, anchor="center")
-
-    msg = CTkLabel(frame_inicial, text="Clique em qualquer lugar.", font=("Arial", 24), text_color="#B0B0B0")
-    msg.place(relx=0.5, rely=0.7, anchor="center")
+    img_label.place(relx=0.5, rely=0.5, anchor="center")
 
     app.mainloop()
+
+
