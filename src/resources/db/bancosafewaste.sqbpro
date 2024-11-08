@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS usuario (            id_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,            nome TEXT NOT NULL,            email TEXT UNIQUE NOT NULL,            senha TEXT NOT NULL,            tipo_usuario TEXT CHECK(tipo_usuario IN ('Operador', 'Gestor_Residuos')) NOT NULL        );        """
