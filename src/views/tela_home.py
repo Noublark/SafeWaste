@@ -9,11 +9,9 @@ import tkinter
 
 def mostrar_tela_home(app, frame, img_label):
 
-    teste = TRUE
-
     global tela_home_frame
-    
-    if teste:
+
+    if common.nivel_acesso == "Operador":
         
         frame.place_forget()
         img_label.place_forget() 
@@ -64,7 +62,7 @@ def mostrar_tela_home(app, frame, img_label):
         img_label_grafico.place(x=12.5, y=187.5)
 
     
-    else:
+    elif common.nivel_acesso == "Gestor_Residuos":
 
         frame.place_forget()
         img_label.place_forget() 

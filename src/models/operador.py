@@ -1,12 +1,12 @@
-from src.models.usuario import Usuario, usuario1
+from src.models.usuario import Usuario
 from src.common.common import NIVEL_ACESSO_OPERADOR
 
 class Operador(Usuario):
     '''classe para o operador que herda de usuario'''
 
-    def __init__(self, nome, email, senha, nivel_acesso):
+    def __init__(self, nome, email, senha):
         super().__init__(nome, email, senha)
-        self.nivel_acesso = nivel_acesso
+        self.nivel_acesso = NIVEL_ACESSO_OPERADOR
 
     def agendar_coleta(self):
         pass
