@@ -1,6 +1,5 @@
 from customtkinter import *
 from PIL import Image, ImageTk
-from . import tela_home
 import tkinter
 
 
