@@ -1,41 +1,30 @@
-from src.controllers import operador_controller, gestor_residuos_controller
 from src.services.servicos_usuarios import Servicos_Usuario
 
-servicos = Servicos_Usuario()
-
 class Usuario:
-    '''classe para o usuario do SafeWaste'''
+    '''Classe para o usuário do SafeWaste'''
 
     def __init__(self, nome, email, senha):
         self.nome = nome
         self.email = email
         self.senha = senha
 
-    def cadastro(self, nivel_acesso): # função pra realizar o cadastro
+    def cadastro(self, nivel_acesso):
+        '''Método para realizar o cadastro do usuário'''
         
-
-        print(f"Nome: {self.nome}")
-        print(f"Email: {self.email}")
-        print("Cadastro realizado com sucesso!")
-
-        resultado = servicos.cadastrar_usuario(self.nome, self.email, self.senha, nivel_acesso)  # Chamando o método de cadastro
-        
-      
-        if nivel_acesso == "operador":
-            operador_controller.inicializacao_operador(self.nome, self.email, self.senha)
-        elif nivel_acesso == "gestor_residuos":
-            gestor_residuos_controller.inicializacao_gestor_residuos(self.nome, self.email, self.senha)
-
+        # Chama o serviço de cadastro
+        resultado = Servicos_Usuario().cadastrar_usuario(self.nome, self.email, self.senha, nivel_acesso)
         return resultado
 
+    def login(self):
+        '''Método para realizar o login do usuário'''
 
-    def login(self): # função pra realizar o login
-        
-        resultado = servicos.login(self.email, self.senha)
-        print(resultado)  # Para depuração, mas você pode remover essa linha
-        return resultado 
+        # Chama o serviço de login
+        resultado = Servicos_Usuario().login(self.email, self.senha)
+        return resultado
 
-    def redefinir_senha(self): # função para redefinir a senha
-        
-        resultado = servicos.redefinir_senha(self.email, self.senha)
+    def redefinir_senha(self, nova_senha):
+        '''Método para redefinir a senha do usuário'''
+
+        # Chama o serviço para redefinir a senha
+        resultado = Servicos_Usuario().redefinir_senha(self.email, nova_senha)
         return resultado

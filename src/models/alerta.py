@@ -9,5 +9,5 @@ class Alerta:
     def emitir_alerta(self):
         pass
 
-    if (exceder o limite):
+    if exceder_o_limite:
         enviar_email()
