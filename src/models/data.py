@@ -1,4 +1,4 @@
-from api_request import APIRequest
+from src.models.api_request import APIRequest
 import pandas as pd
 
 class Data:
@@ -15,7 +15,7 @@ class Data:
         
             result = pd.json_normalize(self.data['data'])
 
-        result = result.head(100000)  # Limitando a leitura para as primeiras 100.000 linhas
+        result = result.head(100)  # Limitando a leitura para as primeiras 100.000 linhas
 
         colunas = [
             'cnpjGerador', 
@@ -31,8 +31,6 @@ class Data:
 
         residuos_filtrados = result[colunas][result['classificacaoResiduo'] == 'Perigoso']
 
-        print(residuos_filtrados) #remover dps
+        return residuos_filtrados, colunas
 
-data = Data()
-data.load_data() #remover dps
         

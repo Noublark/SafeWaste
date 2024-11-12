@@ -1,12 +1,18 @@
 from customtkinter import *
 from PIL import Image, ImageTk
-from . import tela_home
+from src.models.grafico import Grafico
+import tkinter
+from tkinter import Canvas, Scrollbar
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 class TelaGrafico:
     def __init__(self, app):
         self.app = app
         self.tela_grafico_frame = None
         self.img_label_voltar = None
+        self.grafico = Grafico()
 
     def mostrar_tela_grafico(self, frame, frame2):
         # Esconde os frames atuais
@@ -16,6 +22,9 @@ class TelaGrafico:
         # Criação do frame da tela de gráfico
         self.tela_grafico_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_grafico_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.tela_grafico_frame_lateral = CTkFrame(master=self.app, width=65, height=300, corner_radius=10, border_color="", fg_color="#985698")
+        self.tela_grafico_frame_lateral.place(relx=1.0, rely=0.5, anchor=tkinter.E)
 
         # Carrega e ajusta a imagem do botão "voltar"
         img_voltar = Image.open("src/resources/static/back arrow.png")
@@ -28,9 +37,109 @@ class TelaGrafico:
         self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar(frame, frame2))
         self.img_label_voltar.place(x=20, y=20)
 
+        img_tabela = self.carregar_imagem("src/resources/static/tabela.png", (40, 40))
+        self.img_label_tabela = CTkLabel(self.tela_grafico_frame_lateral, image=img_tabela, text="", fg_color="#985698", cursor="hand2")
+        self.img_label_tabela._image = img_tabela
+        self.img_label_tabela.bind("<Button-1>", lambda event: self.mostrar_tabela(self.tela_grafico_frame, self.tela_grafico_frame_lateral, self.img_label_voltar))
+        self.img_label_tabela.place(x=15, y=130)
+
+        self.mostrar_grafico(self.tela_grafico_frame)
+
+    
+    def mostrar_tabela(self, frame, frame2, img_label):
+
+        frame.place_forget()
+        frame2.place_forget()
+        img_label.place_forget()
+
+
+        residuos_filtrados, colunas = self.grafico.exibir_dados_em_tabela()
+
+        # Quadro principal onde a Canvas será colocada
+        self.tabela_frame = CTkFrame(master=self.app, width=650, height=450, corner_radius=15, border_color="")
+        self.tabela_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Canvas para rolagem bidirecional
+        self.canvas = Canvas(self.tabela_frame, width=630, height=430)
+        self.canvas.grid(row=0, column=0, sticky="nsew")
+
+        # Frame interno dentro da Canvas para conter os dados da tabela
+        self.scrollable_frame = CTkFrame(self.canvas, border_color="", bg_color="#080808", corner_radius=15)
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        # Barras de rolagem
+        horizontal_scrollbar = Scrollbar(self.tabela_frame, orient="horizontal", command=self.canvas.xview)
+        horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
+        vertical_scrollbar = Scrollbar(self.tabela_frame, orient="vertical", command=self.canvas.yview)
+        vertical_scrollbar.grid(row=0, column=1, sticky="ns")
+
+        # Configuração das barras de rolagem na Canvas
+        self.canvas.configure(xscrollcommand=horizontal_scrollbar.set, yscrollcommand=vertical_scrollbar.set)
+
+        # Exibe cabeçalhos das colunas
+        for i, coluna in enumerate(colunas):
+            header_label = CTkLabel(self.scrollable_frame, text=coluna, width=20, anchor="w")
+            header_label.grid(row=0, column=i, padx=5, pady=5)
+
+        # Exibe dados nas linhas
+        for row_index, row in residuos_filtrados.iterrows():
+            for col_index, item in enumerate(row):
+                cell_label = CTkLabel(self.scrollable_frame, text=str(item), width=20, anchor="w")
+                cell_label.grid(row=row_index + 1, column=col_index, padx=5, pady=5)
+
+        # Atualiza o tamanho do scrollable_frame para que a Canvas possa rolar corretamente
+        self.scrollable_frame.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))
+
+        self.img_voltar_tabela = Image.open("src/resources/static/back arrow.png")
+        self.img_voltar_tabela = self.img_voltar_tabela.resize((40, 50), Image.LANCZOS)
+        img_tk1 = ImageTk.PhotoImage(self.img_voltar_tabela)
+
+        # Criação do botão "voltar"
+        self.img_label_voltar_tabela = CTkLabel(self.app, image=img_tk1, text="", cursor="hand2")
+        self.img_label_voltar_tabela.image = img_tk1
+        self.img_label_voltar_tabela.bind("<Button-1>", lambda event: self.grafico)
+        self.img_label_voltar_tabela.place(x=20, y=20)
+
+    
     def voltar(self, frame_anterior, img_label_anterior):
         from .tela_home import TelaHome
         self.tela_grafico_frame.place_forget()
         self.img_label_voltar.place_forget()
         TelaHome(self.app).mostrar_tela_home(frame_anterior, img_label_anterior)
 
+
+    def voltar_grafico(self, frame, img_label):
+    
+        self.tabela_frame.place_forget()
+        self.img_label_voltar_tabela.place_forget()
+        self.mostrar_tela_grafico(frame, img_label)
+
+
+    def carregar_imagem(self, caminho, tamanho):
+        img = Image.open(caminho)
+        img = img.resize(tamanho, Image.LANCZOS)
+        return ImageTk.PhotoImage(img)
+    
+
+    def mostrar_grafico(self, tela_grafico_frame):
+        
+        dados_grafico = self.grafico.exibir_grafico()
+
+        if dados_grafico is not None:
+            # Gerar o gráfico
+         
+            fig, ax = plt.subplots(figsize=(10, 6))
+            fig.patch.set_facecolor('#080808')
+            ax.set_facecolor('white') 
+            ax.bar(dados_grafico['anoGeracao'], dados_grafico['quantidadeGerada'], color='#985698')
+            ax.set_xlabel('Ano de Geração', color='white', fontsize=6)
+            ax.set_ylabel('Quantidade Gerada', color='white', fontsize=6)
+            ax.set_title('Quantidade de Resíduos Perigosos Gerados por Ano', color='white', fontsize=12)
+            ax.tick_params(axis='x', colors = 'white',rotation=45)
+            ax.tick_params(axis='y', colors='white')
+
+            # Adicionar o gráfico ao canvas da tabela
+            canvas = FigureCanvasTkAgg(fig, master=tela_grafico_frame)
+            canvas.draw()
+            canvas.get_tk_widget().place(relx=0.5, rely=0.5, anchor="center", width=475, height=375)

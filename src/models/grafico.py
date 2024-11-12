@@ -1,7 +1,16 @@
+from src.controllers.data_controller import DataController
+
 class Grafico:
 
     def __init__(self):
-        pass
+
+        self.data_controller = DataController()
 
     def exibir_grafico(self):
-        pass
+        
+        return self.data_controller.gerar_grafico()
+
+    def exibir_dados_em_tabela(self):
+
+        return self.data_controller.gerar_tabela()
+
