@@ -10,3 +10,4 @@ class ConexaoSQLite:
         except sqlite3.Error as erro:
             print(f"Erro na conexão: {erro}")
         return conn
+    

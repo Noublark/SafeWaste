@@ -1,4 +1,6 @@
 from src.views.app import App
+from src.models.relatorio import Relatorio
+from src.services.servicos_relatorio import ServicosRelatorio
 
 # inicializacao do projeto
 

@@ -12,6 +12,7 @@ class Data:
         self.data = self.api.get_data()
 
         if 'data' in self.data:
+            print(f"Dados carregados com sucesso: {len(self.data['data'])} registros.")
         
             result = pd.json_normalize(self.data['data'])
 
