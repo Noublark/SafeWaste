@@ -63,7 +63,7 @@ class TelaHome:
         img_agenda = self.carregar_imagem("src/resources/static/agenda.png", (40, 40))
         self.img_label_agenda = CTkLabel(self.tela_home_frame_lateral, image=img_agenda, text="", fg_color="#985698", cursor="hand2")
         self.img_label_agenda._image = img_agenda
-        self.img_label_agenda.bind("<Button-1>", lambda event: self.tela_coleta.mostrar_tela_coleta(self.tela_home_frame, self.tela_home_frame_lateral))
+        self.img_label_agenda.bind("<Button-1>", lambda event: self.tela_coleta.mostrar_tela_coleta(self.tela_home_frame, self.tela_home_frame_lateral, self.img_label_sair))
         self.img_label_agenda.place(x=15, y=72.5)
 
         # Botão para gráfico

@@ -1,6 +1,7 @@
 from hashlib import sha256
 import sqlite3
 from src.resources.db.conexao_sqlite import ConexaoSQLite
+from src.controllers.sessao import SessaoUsuario
 
 class Servicos_Usuario:
     def __init__(self):
@@ -70,6 +71,7 @@ class Servicos_Usuario:
         
         if usuario:
             tipo_usuario = usuario[2]  # Obtém o tipo de usuário (ex: "operador", "gestor_residuos")
+            SessaoUsuario.login({'id_usuario': usuario[0], 'nome': usuario[1], 'tipo_usuario': tipo_usuario})
             return f"Login bem-sucedido! Bem-vindo, {usuario[1]}.", tipo_usuario
         else:
             return "Erro: Email ou senha incorretos.", None
