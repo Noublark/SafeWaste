@@ -22,6 +22,7 @@ class ServicosColeta:
                 data DATE NOT NULL,
                 endereco TEXT NOT NULL,
                 id_usuario INTEGER NOT NULL,
+                status TEXT DEFAULT 'pendente',  -- Adiciona status com valor padrão 'pendente'
                 FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
@@ -56,8 +57,24 @@ class ServicosColeta:
 
     def concluir_coleta_db(self, id_coleta):
         """Marca uma coleta como concluída."""
-        # Lógica de conclusão pode ser implementada, ex: atualizar status
-        return "Coleta concluída."
+        conn = self.conexao_db.conexao()
+        if conn is None:
+            return "Erro ao conectar ao banco de dados."
+
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("""
+            UPDATE coleta
+            SET status = 'concluída'
+            WHERE id_coleta = ?;
+            """, (id_coleta,))
+            conn.commit()
+            return "Coleta concluída com sucesso!"
+        except sqlite3.Error as erro:
+            return f"Erro ao concluir a coleta: {erro}"
+        finally:
+            conn.close()
 
     def editar_coleta_db(self, id_coleta, novo_tipo_residuo, nova_data, novo_endereco):
         """Edita uma coleta existente."""
