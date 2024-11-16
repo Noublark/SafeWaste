@@ -22,10 +22,33 @@ class TelaHome:
         self.tela_coleta = TelaColeta(self.app)
         self.tela_relatorio = TelaRelatorio(self.app)
 
+    def esconder_frames(self):
+        # Esconde todos os frames e labels
+        if self.tela_home_frame:
+            self.tela_home_frame.place_forget()
+        if self.tela_home_frame_lateral:
+            self.tela_home_frame_lateral.place_forget()
+        if self.img_label_sair:
+            self.img_label_sair.place_forget()
+        if self.img_label_alerta:
+            self.img_label_alerta.place_forget()
+        if self.img_label_agenda:
+            self.img_label_agenda.place_forget()
+        if self.img_label_grafico:
+            self.img_label_grafico.place_forget()
+        if self.img_label_relatorio:
+            self.img_label_relatorio.place_forget()
+        if self.msg_label:
+            self.msg_label.place_forget()
+
     def mostrar_tela_home(self, frame, img_label):
-        # Esconde a tela anterior
-        frame.place_forget()
-        img_label.place_forget()
+        # Esconde a tela anterior se existir
+        if frame and img_label:
+            frame.place_forget()
+            img_label.place_forget()
+            
+        # Esconde frames atuais se existirem
+        self.esconder_frames()
 
         # Verifica o nível de acesso e cria a tela correspondente
         if common.nivel_acesso == "Operador":

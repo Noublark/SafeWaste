@@ -5,29 +5,60 @@ import re
 from datetime import datetime
 from src.models.coleta import Coleta
 
-
-
 class TelaColeta:
     def __init__(self, app):
         self.app = app
         self.tela_coleta_frame = None
+        self.tela_agendar_coleta_frame = None
+        self.tela_editar_coleta_frame = None
+        self.mostrar_popup_concluido_frame = None
+        self.mostrar_popup_remover_frame = None
         self.img_label_voltar = None
+        self.img_label_voltar_coleta = None
+        self.img_label_voltar_coleta1 = None
         self.img_label_adicionar = None
+        
+        # Carregar imagem voltar uma única vez
+        self.img_voltar = Image.open("src/resources/static/back arrow.png")
+        self.img_voltar = self.img_voltar.resize((40, 50), Image.LANCZOS)
+        self.img_tk = ImageTk.PhotoImage(self.img_voltar)
+
+    def esconder_todos_frames(self):
+        frames = [
+            self.tela_coleta_frame,
+            self.tela_agendar_coleta_frame, 
+            self.tela_editar_coleta_frame,
+            self.mostrar_popup_concluido_frame,
+            self.mostrar_popup_remover_frame
+        ]
+        
+        labels = [
+            self.img_label_voltar,
+            self.img_label_voltar_coleta,
+            self.img_label_voltar_coleta1
+        ]
+        
+        for frame in frames:
+            if frame:
+                frame.place_forget()
+                
+        for label in labels:
+            if label:
+                label.place_forget()
 
     def mostrar_tela_coleta(self, frame, frame2, img_label_sair):
-        # Esconde os frames anteriores
-        frame.place_forget()
-        frame2.place_forget()
-        img_label_sair.place_forget()
+        self.esconder_todos_frames()
+        
+        if frame:
+            frame.place_forget()
+        if frame2:    
+            frame2.place_forget()
+        if img_label_sair:
+            img_label_sair.place_forget()
 
         # Criação do frame da tela de coleta
         self.tela_coleta_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_coleta_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
-
-        # Carregar e ajustar a imagem do botão "voltar"
-        self.img_voltar = Image.open("src/resources/static/back arrow.png")
-        self.img_voltar = self.img_voltar.resize((40, 50), Image.LANCZOS)
-        self.img_tk = ImageTk.PhotoImage(self.img_voltar)
 
         # Criação do botão "voltar"
         self.img_label_voltar = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
@@ -40,7 +71,7 @@ class TelaColeta:
         img_tk1 = ImageTk.PhotoImage(img_adicionar)
 
         self.img_label_adicionar = CTkLabel(self.tela_coleta_frame, image=img_tk1, text="", cursor="hand2")
-        self.img_label_adicionar.bind("<Button-1>", lambda event: self.mostrar_tela_agendar(self.tela_coleta_frame, self.img_label_voltar))
+        self.img_label_adicionar.bind("<Button-1>", lambda event: self.mostrar_tela_agendar())
         self.img_label_adicionar.place(x=460, y=30)
 
         # Título da tela de coleta
@@ -93,7 +124,7 @@ class TelaColeta:
                 img_tk2 = ImageTk.PhotoImage(img_editar)
                 img_label_editar = CTkLabel(coletas_config, image=img_tk2, text="", cursor="hand2")
                 img_label_editar.image = img_tk2
-                img_label_editar.bind("<Button-1>", lambda event, id=id_coleta: self.mostrar_tela_editar(self.tela_coleta_frame, self.img_label_voltar, id))
+                img_label_editar.bind("<Button-1>", lambda event, id=id_coleta: self.mostrar_tela_editar(id))
                 img_label_editar.place(x=63, y=y_inicial + i * espacamento_y)
 
                 # Imagem de remover
@@ -104,24 +135,13 @@ class TelaColeta:
                 img_label_remover.bind("<Button-1>", lambda event, id=id_coleta: self.mostrar_popup_remover(id))
                 img_label_remover.place(x=113, y=y_inicial + i * espacamento_y)
 
-
     def voltar(self, frame_anterior, img_label_anterior):
         from .tela_home import TelaHome
-        self.tela_coleta_frame.place_forget()
-        self.img_label_voltar.place_forget()
+        self.esconder_todos_frames()
         TelaHome(self.app).mostrar_tela_home(frame_anterior, img_label_anterior)
 
-    def voltar_coleta(self, frame, img_label):
-        if img_label:
-            frame.place_forget()
-            img_label.place_forget()
-        self.mostrar_tela_coleta(frame, frame , img_label)
-
-    
-    def mostrar_tela_agendar(self, frame, img_label):
-
-        frame.place_forget()
-        img_label.place_forget()
+    def mostrar_tela_agendar(self):
+        self.esconder_todos_frames()
 
         self.tela_agendar_coleta_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_agendar_coleta_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -142,12 +162,10 @@ class TelaColeta:
         btn_agendar.place(x=100, y=290)
 
         self.img_label_voltar_coleta = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
-        self.img_label_voltar_coleta.bind("<Button-1>", lambda event: self.voltar_coleta(self.tela_agendar_coleta_frame, self.img_label_voltar_coleta))
+        self.img_label_voltar_coleta.bind("<Button-1>", lambda event: self.mostrar_tela_coleta(None, None, None))
         self.img_label_voltar_coleta.place(x=20, y=20)
 
-
     def agendar(self):
-
         tipo_residuo = self.campo_tipo_residuo.get()
         data = self.campo_data.get()
         endereco = self.campo_endereco.get()
@@ -161,33 +179,23 @@ class TelaColeta:
         data_formatada = self.formatar_data(data)
 
         if data_formatada:
-            
             coleta = Coleta(tipo_residuo=tipo_residuo, data=data, endereco=endereco)
             resultado = coleta.agendar_coleta()
 
             if "Coleta agendada com sucesso!" in resultado:
                 label_resultado = CTkLabel(self.tela_agendar_coleta_frame, text=resultado, text_color="green")
                 label_resultado.place(x=100, y=320)
-                self.tela_agendar_coleta_frame.after(1500, label_resultado.place_forget)
-                return
-            
+                self.tela_agendar_coleta_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
             else:
                 label_resultado = CTkLabel(self.tela_agendar_coleta_frame, text=resultado, text_color="red")
                 label_resultado.place(x=100, y=320)
                 self.tela_agendar_coleta_frame.after(1500, label_resultado.place_forget)
-                return
-
         else:
-            
             label_erro1 = CTkLabel(self.tela_agendar_coleta_frame, text="Data inválida! O formato correto é DD/MM/YYYY.", text_color="red")
             label_erro1.place(x=100, y=320)
             self.tela_agendar_coleta_frame.after(1500, label_erro1.place_forget)
-            return
-        
 
-    
     def mostrar_popup_concluido(self, id_coleta):
-
         self.mostrar_popup_concluido_frame = CTkFrame(master=self.tela_coleta_frame, width=400, height=250, corner_radius=15, border_color="grey", fg_color="#080808")
         self.mostrar_popup_concluido_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
@@ -200,11 +208,8 @@ class TelaColeta:
         btn_cancelar = CTkButton(master=self.mostrar_popup_concluido_frame, text="Cancelar", command=self.mostrar_popup_concluido_frame.place_forget, corner_radius=10, fg_color="#b20000", hover_color="#e50000", width=125)
         btn_cancelar.place(x=50, y=150)
 
-
-    def mostrar_tela_editar(self, frame, img_label, id_coleta):
-
-        frame.place_forget()
-        img_label.place_forget()
+    def mostrar_tela_editar(self, id_coleta):
+        self.esconder_todos_frames()
 
         self.tela_editar_coleta_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_editar_coleta_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -225,16 +230,10 @@ class TelaColeta:
         btn_editar.place(x=100, y=290)
 
         self.img_label_voltar_coleta1 = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
-        self.img_label_voltar_coleta1.bind("<Button-1>", lambda event: self.voltar_coleta(self.tela_editar_coleta_frame, self.img_label_voltar_coleta1))
+        self.img_label_voltar_coleta1.bind("<Button-1>", lambda event: self.mostrar_tela_coleta(None, None, None))
         self.img_label_voltar_coleta1.place(x=20, y=20)
 
-        
-
-
-
     def mostrar_popup_remover(self, id_coleta):
-
-
         self.mostrar_popup_remover_frame = CTkFrame(master=self.tela_coleta_frame, width=400, height=250, corner_radius=15, border_color="grey", fg_color="#080808")
         self.mostrar_popup_remover_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
@@ -247,25 +246,20 @@ class TelaColeta:
         btn_cancelar = CTkButton(master=self.mostrar_popup_remover_frame, text="Cancelar", command=self.mostrar_popup_remover_frame.place_forget, corner_radius=10, fg_color="#b20000", hover_color="#e50000", width=125)
         btn_cancelar.place(x=50, y=150)
 
-
-
     def formatar_data(self, data):
         """
         Formata a data no formato DD/MM/YYYY para YYYY-MM-DD, caso não esteja no formato correto.
         Retorna None se a data for inválida.
         """
-        # Verifica se a data está no formato DD/MM/YYYY
         padrao = r"^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$"
         if re.match(padrao, data):
             try:
-                # Converte para o formato YYYY-MM-DD
                 data_obj = datetime.strptime(data, "%d/%m/%Y")
                 return data_obj.strftime("%Y-%m-%d")
             except ValueError:
                 return None
         else:
             return None
-
 
     def editar_coleta(self, id_coleta):
         tipo_residuo = self.campo_novo_tipo_residuo.get()
@@ -281,14 +275,13 @@ class TelaColeta:
         data_formatada = self.formatar_data(data)
 
         if data_formatada:
-            # Passar os dados para o método de edição de coleta
             coleta = Coleta(tipo_residuo=tipo_residuo, data=data_formatada, endereco=endereco)
             resultado = coleta.editar_coleta(id_coleta, tipo_residuo, data, endereco)
 
             if "Coleta editada com sucesso!" in resultado:
                 label_resultado = CTkLabel(self.tela_editar_coleta_frame, text=resultado, text_color="green")
                 label_resultado.place(x=100, y=320)
-                self.tela_editar_coleta_frame.after(1500, label_resultado.place_forget)
+                self.tela_editar_coleta_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
             else:
                 label_resultado = CTkLabel(self.tela_editar_coleta_frame, text=resultado, text_color="red")
                 label_resultado.place(x=100, y=320)
@@ -297,35 +290,46 @@ class TelaColeta:
             label_erro1 = CTkLabel(self.tela_editar_coleta_frame, text="Data inválida! O formato correto é DD/MM/YYYY.", text_color="red")
             label_erro1.place(x=100, y=320)
             self.tela_editar_coleta_frame.after(1500, label_erro1.place_forget)
-        
 
     def concluir_coleta(self, id_coleta):
-
         coleta = Coleta()
-
         resultado = coleta.cancelar_coleta(id_coleta)
+        
         if "Coleta concluída com sucesso!" in resultado:
             label_resultado = CTkLabel(self.mostrar_popup_concluido_frame, text=resultado, text_color="green")
             label_resultado.place(x=100, y=320)
-            self.mostrar_popup_concluido_frame.after(1500, label_resultado.place_forget)
-        else: 
+            self.mostrar_popup_concluido_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
+        else:
             label_erro = CTkLabel(self.mostrar_popup_concluido_frame, text=resultado, text_color="red")
             label_erro.place(x=100, y=320)
-            self.mostrar_popup_concluido_frame.after(1500, label_erro.place_forget)
-
+            self.mostrar_popup_concluido_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
 
     def remover_coleta(self, id_coleta):
-
         coleta = Coleta()
-
         resultado = coleta.cancelar_coleta(id_coleta)
+        
         if "Coleta cancelada com sucesso!" in resultado:
             label_resultado = CTkLabel(self.mostrar_popup_remover_frame, text=resultado, text_color="green")
             label_resultado.place(x=100, y=320)
             self.mostrar_popup_remover_frame.after(1500, label_resultado.place_forget)
+            self.mostrar_popup_remover_frame.place_forget()
         else: 
             label_erro = CTkLabel(self.mostrar_popup_remover_frame, text=resultado, text_color="red")
             label_erro.place(x=100, y=320)
             self.mostrar_popup_remover_frame.after(1500, label_erro.place_forget)
+            self.mostrar_popup_remover_frame.place_forget()
 
+        self.atualizar_coletas()
+
+
+    def atualizar_coletas(self):
+        """
+        Recarrega os frames de coletas e configurações com base nos dados do banco.
+        """
+        # Limpar frames antes de recarregar
+        '''for widget in self.tela_coleta_frame.winfo_children():
+                widget.forget()
+'''
+        # Recarregar os labels e as imagens
+        self.mostrar_tela_coleta(self.tela_agendar_coleta_frame, self.tela_agendar_coleta_frame , self.img_label_voltar_coleta)
 
