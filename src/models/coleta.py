@@ -26,15 +26,18 @@ class Coleta:
 
     def concluir_coleta(self, id_coleta):
         """Concluir uma coleta"""
-        return ServicosColeta().concluir_coleta_db(id_coleta)
+        resultado = ServicosColeta().concluir_coleta_db(id_coleta)
+        return resultado
 
     def editar_coleta(self, id_coleta, novo_tipo_residuo, nova_data, novo_endereco):
         """Editar uma coleta existente"""
-        return ServicosColeta().editar_coleta_db(id_coleta, novo_tipo_residuo, nova_data, novo_endereco)
+        resultado = ServicosColeta().editar_coleta_db(id_coleta, novo_tipo_residuo, nova_data, novo_endereco)
+        return resultado
 
     def cancelar_coleta(self, id_coleta):
         """Cancelar uma coleta"""
-        return ServicosColeta().cancelar_coleta_db(id_coleta)
+        resultado = ServicosColeta().cancelar_coleta_db(id_coleta)
+        return resultado
 
     def exibir_coletas(self):
         """Exibir todas as coletas do usuário logado"""

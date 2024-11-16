@@ -137,10 +137,18 @@ class TelaHome:
         self.img_label_grafico.place(x=12.5, y=187.5)
 
     def carregar_imagem(self, caminho, tamanho):
-        img = Image.open(caminho)
-        img = img.resize(tamanho, Image.LANCZOS)
-        return ImageTk.PhotoImage(img)
+        try:
+            img = Image.open(caminho)
+            img = img.resize(tamanho, Image.LANCZOS)
+            return ImageTk.PhotoImage(img)
+        except Exception as e:
+            print(f"Erro ao carregar imagem {caminho}: {str(e)}")
+            return None
 
     def sair(self):
-        from src.common.reset import reset_app
-        reset_app(self.app)
+        try:
+            from src.common.reset import reset_app
+            self.esconder_frames()
+            reset_app(self.app)
+        except Exception as e:
+            print(f"Erro ao sair: {str(e)}")

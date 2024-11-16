@@ -64,6 +64,21 @@ class ServicosColeta:
         cursor = conn.cursor()
 
         try:
+            # Primeiro verifica se a coluna status existe
+            cursor.execute("""
+            SELECT COUNT(*) FROM pragma_table_info('coleta') WHERE name='status';
+            """)
+            status_exists = cursor.fetchone()[0]
+
+            if not status_exists:
+                # Adiciona a coluna status se não existir
+                cursor.execute("""
+                ALTER TABLE coleta
+                ADD COLUMN status TEXT DEFAULT 'pendente';
+                """)
+                conn.commit()
+
+            # Atualiza o status da coleta
             cursor.execute("""
             UPDATE coleta
             SET status = 'concluída'
@@ -115,7 +130,7 @@ class ServicosColeta:
             conn.close()
 
     def obter_coletas_usuario(self, id_usuario):
-        """Obtém todas as coletas associadas a um usuário específico."""
+        """Obtém todas as coletas pendentes associadas a um usuário específico."""
         conn = self.conexao_db.conexao()
         if conn is None:
             return "Erro ao conectar ao banco de dados."
@@ -123,7 +138,10 @@ class ServicosColeta:
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT * FROM coleta WHERE id_usuario = ?;", (id_usuario,))
+            cursor.execute("""
+                SELECT * FROM coleta 
+                WHERE id_usuario = ? AND status = 'pendente';
+            """, (id_usuario,))
             coletas = cursor.fetchall()
             return coletas
         except sqlite3.Error as erro:

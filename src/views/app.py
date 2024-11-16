@@ -1,10 +1,8 @@
 from PIL import Image, ImageTk
-from customtkinter import *
+from customtkinter import CTk, CTkFrame, CTkLabel, set_appearance_mode, set_default_color_theme, BOTH, TRUE
 from .tela_login import TelaLogin
 
-
 class App:
-    
     def __init__(self):
         set_appearance_mode("dark")
         set_default_color_theme("src/resources/theme/DaynNight.json")
@@ -12,43 +10,41 @@ class App:
         self.app = CTk()
         self.app.title("SafeWaste")
 
-        self.width, self.height = 800, 600
-        self.pos_x = (self.app.winfo_screenwidth() - self.width) // 2
-        self.pos_y = (self.app.winfo_screenheight() - self.height) // 2
-        self.app.geometry(f"{self.width}x{self.height}+{self.pos_x}+{self.pos_y}")
+        # Centraliza a janela na tela
+        self.width = 800
+        self.height = 600
+        pos_x = (self.app.winfo_screenwidth() - self.width) // 2
+        pos_y = (self.app.winfo_screenheight() - self.height) // 2
+        self.app.geometry(f"{self.width}x{self.height}+{pos_x}+{pos_y}")
 
         self.frame_inicial = None
-        self.img_label = None
-        self.img_tk = None
         self.tela_login = TelaLogin(self.app)
 
     def start(self):
-
-        self.setup_frame_inicial()  # Configura o frame inicial
+        self.setup_frame_inicial()
         self.app.mainloop()
 
     def setup_frame_inicial(self):
-        # Limpa todos os widgets na janela antes de configurar o novo frame
+        # Limpa widgets existentes
         for widget in self.app.winfo_children():
             widget.destroy()
 
-        # Cria o frame inicial
+        # Configura frame inicial
         self.frame_inicial = CTkFrame(master=self.app, fg_color="black", border_color="black")
         self.frame_inicial.pack(fill=BOTH, expand=TRUE)
 
-        # Carrega e configura a imagem dentro do contexto da janela principal
-        img_path = "img_teste.png"
-        img = Image.open(img_path)
+        # Carrega e exibe imagem
+        img = Image.open("img_teste.png")
         img = img.resize((320, 300), Image.LANCZOS)
-        self.img_tk = ImageTk.PhotoImage(img)   # A imagem é agora um atributo da classe
+        img_tk = ImageTk.PhotoImage(img)
 
-        # Exibe a imagem na tela inicial
-        self.img_label = CTkLabel(self.frame_inicial, image=self.img_tk, text="")
-        self.img_label.image = self.img_tk  # Mantém a referência da imagem no atributo da classe
-        self.img_label.place(relx=0.5, rely=0.5, anchor="center")
+        img_label = CTkLabel(self.frame_inicial, image=img_tk, text="")
+        img_label.image = img_tk  # Mantém uma referência forte para a imagem
+        img_label.image = img_tk
+        img_label.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Configura evento de clique para chamar tela_login
-        self.app.bind("<Button-1>", self.mostrar_tela_login)
+        # Configura evento de clique
+        self.app.bind("<Button-1>", lambda event: self.mostrar_tela_login(event, img_label))
 
-    def mostrar_tela_login(self, event):
-        self.tela_login.mostrar_tela_login(self.frame_inicial, self.img_label)
+    def mostrar_tela_login(self, event, img_label):
+        self.tela_login.mostrar_tela_login(self.frame_inicial, img_label)

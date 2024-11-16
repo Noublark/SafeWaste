@@ -8,30 +8,33 @@ class Data:
         self.data = None
 
     def load_data(self):
-
-        self.data = self.api.get_data()
+        # Carrega os dados apenas se ainda não foram carregados
+        if self.data is None:
+            self.data = self.api.get_data()
 
         if 'data' in self.data:
             print(f"Dados carregados com sucesso: {len(self.data['data'])} registros.")
-        
-            result = pd.json_normalize(self.data['data'])
 
-        result = result.head(100)  # Limitando a leitura para as primeiras 100.000 linhas
+            # Define as colunas que queremos ler
+            colunas = [
+                'cnpjGerador', 
+                'detalhe',
+                'estado', 
+                'municipio',  
+                'anoGeracao', 
+                'tipoResiduo', 
+                'quantidadeGerada', 
+                'unidade',
+                'classificacaoResiduo'
+            ]
 
-        colunas = [
-            'cnpjGerador', 
-            'detalhe',
-            'estado', 
-            'municipio',  
-            'anoGeracao', 
-            'tipoResiduo', 
-            'quantidadeGerada', 
-            'unidade',
-            'classificacaoResiduo'
-        ]
+            # Lê apenas as colunas necessárias e já aplica o filtro durante a normalização
+            result = pd.json_normalize(
+                self.data['data'],
+                max_level=0  # Evita processamento desnecessário de níveis aninhados
+            )[colunas]
 
-        residuos_filtrados = result[colunas][result['classificacaoResiduo'] == 'Perigoso']
+            # Aplica o filtro e limita os dados em uma única operação
+            residuos_filtrados = result[colunas][result['classificacaoResiduo'] == 'Perigoso'].head(100)
 
-        return residuos_filtrados, colunas
-
-        
+            return residuos_filtrados, colunas
