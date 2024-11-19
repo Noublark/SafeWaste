@@ -1,6 +1,5 @@
-from src.views.app import App
+from src.controllers.sessao import SessaoUsuario
 
 def reset_app(app):
-    
-    safe_waste_app = App()
-    safe_waste_app.start()
+    """Realiza o logout e retorna para a tela de login"""
+    SessaoUsuario.deslogar(app)
