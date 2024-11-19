@@ -31,11 +31,11 @@ class TelaLogin:
         self.login_frame.place(relx=1.0, rely=0.5, anchor=tkinter.E)
 
         # Configura imagem
-        img = Image.open("img_teste.png").resize((220, 200), Image.LANCZOS)
+        img = Image.open("src/resources/static/icon.png").resize((220, 200), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
         self.img_label = CTkLabel(self.app, image=img_tk, text="")
         self.img_label.image = img_tk
-        self.img_label.place(relx=0.12, rely=0.5, anchor=tkinter.W)
+        self.img_label.place(relx=0.135, rely=0.5, anchor=tkinter.W)
 
         # Título
         CTkLabel(self.login_frame, text="Faça Login", font=('Century Gothic', 32)).place(x=130, y=150)

@@ -10,6 +10,9 @@ class App:
         self.app = CTk()
         self.app.title("SafeWaste")
 
+        icon_image = ImageTk.PhotoImage(file="src/resources/static/icon.png")
+        self.app.iconphoto(True, icon_image)
+
         # Centraliza a janela na tela
         self.width = 800
         self.height = 600
@@ -34,8 +37,8 @@ class App:
         self.frame_inicial.pack(fill=BOTH, expand=TRUE)
 
         # Carrega e exibe imagem
-        img = Image.open("img_teste.png")
-        img = img.resize((320, 300), Image.LANCZOS)
+        img = Image.open("src/resources/static/icon title.png")
+        img = img.resize((250, 255), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
 
         img_label = CTkLabel(self.frame_inicial, image=img_tk, text="")

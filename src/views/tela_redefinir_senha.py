@@ -32,11 +32,11 @@ class TelaRedefinirSenha:
         self.redefinir_senha_frame.place(relx=1.0, rely=0.5, anchor=tkinter.E)
 
         # Imagem
-        img = Image.open("img_teste.png").resize((220, 200), Image.LANCZOS)
+        img = Image.open("src/resources/static/icon.png").resize((220, 200), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
         self.img_label = CTkLabel(self.app, image=img_tk, text="")
         self.img_label.image = img_tk
-        self.img_label.place(relx=0.12, rely=0.5, anchor=tkinter.W)
+        self.img_label.place(relx=0.135, rely=0.5, anchor=tkinter.W)
 
         # Campos
         CTkLabel(self.redefinir_senha_frame, text="Redefinir Senha", font=('Century Gothic', 32)).place(x=100, y=150)

@@ -38,7 +38,7 @@ class TelaGrafico:
         self.img_label_tabela = CTkLabel(self.tela_grafico_frame_lateral, image=img_tabela, text="", fg_color="#985698", cursor="hand2")
         self.img_label_tabela._image = img_tabela
         self.img_label_tabela.bind("<Button-1>", lambda event: self.mostrar_tabela(self.tela_grafico_frame, self.tela_grafico_frame_lateral, self.img_label_voltar))
-        self.img_label_tabela.place(x=15, y=130)
+        self.img_label_tabela.place(x=12, y=120)
 
         self.mostrar_grafico(self.tela_grafico_frame)
 

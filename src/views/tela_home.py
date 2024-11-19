@@ -83,11 +83,11 @@ class TelaHome:
         self.msg_label.place(x=175, y=240)
 
         # Botão para agenda
-        img_agenda = self.carregar_imagem("src/resources/static/agenda.png", (40, 40))
+        img_agenda = self.carregar_imagem("src/resources/static/agenda.png", (45, 45))
         self.img_label_agenda = CTkLabel(self.tela_home_frame_lateral, image=img_agenda, text="", fg_color="#985698", cursor="hand2")
         self.img_label_agenda._image = img_agenda
         self.img_label_agenda.bind("<Button-1>", lambda event: self.tela_coleta.mostrar_tela_coleta(self.tela_home_frame, self.tela_home_frame_lateral, self.img_label_sair))
-        self.img_label_agenda.place(x=15, y=72.5)
+        self.img_label_agenda.place(x=10, y=72.5)
 
         # Botão para gráfico
         img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
@@ -123,11 +123,11 @@ class TelaHome:
         self.msg_label.place(x=175, y=240)
 
         # Botão para relatórios
-        img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (40, 40))
+        img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (50, 50))
         self.img_label_relatorio = CTkLabel(self.tela_home_frame_lateral, image=img_relatorio, text="", fg_color="#985698", cursor="hand2")
         self.img_label_relatorio._image = img_relatorio
         self.img_label_relatorio.bind("<Button-1>", lambda event: self.tela_relatorio.mostrar_tela_relatorio(self.tela_home_frame, self.tela_home_frame_lateral))
-        self.img_label_relatorio.place(x=15, y=72.5)
+        self.img_label_relatorio.place(x=8, y=72.5)
 
         # Botão para gráfico
         img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
