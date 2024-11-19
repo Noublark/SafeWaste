@@ -19,16 +19,34 @@ class TelaCadastro:
         self.img_label = None
         self.usuario_controller = UsuarioController()
 
-    def mostrar_tela_cadastro(self, frame, img_label):
-        frame.place_forget()
-        img_label.place_forget()
+    def esconder_todos_frames(self):
+        frames = [
+            self.cadastro_frame
+        ]
+        
+        labels = [
+            self.img_label_voltar,
+            self.img_label
+        ]
+        
+        for frame in frames:
+            if frame:
+                frame.destroy()
+                
+        for label in labels:
+            if label:
+                label.destroy()
+
+    def mostrar_tela_cadastro(self):
+        
+        self.esconder_todos_frames()
 
         # Botão voltar
         img_voltar = Image.open("src/resources/static/back arrow.png").resize((40, 50), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img_voltar)
         self.img_label_voltar = CTkLabel(self.app, image=img_tk, text="", cursor="hand2")
         self.img_label_voltar.image = img_tk
-        self.img_label_voltar.bind("<Button-1>", lambda e: self.voltar(self.cadastro_frame, self.img_label, self.img_label_voltar))
+        self.img_label_voltar.bind("<Button-1>", lambda e: self.voltar())
         self.img_label_voltar.place(x=20, y=20)
 
         # Frame principal
@@ -73,11 +91,10 @@ class TelaCadastro:
         elif self.marcacao_gestor_residuos.get():
             self.marcacao_operador.set(0)
 
-    def voltar(self, frame, img_label, img_label_voltar):
+    def voltar(self):
         from .tela_login import TelaLogin
-        frame.place_forget()
-        img_label_voltar.place_forget()
-        TelaLogin(self.app).mostrar_tela_login(frame, img_label)
+        self.esconder_todos_frames()
+        TelaLogin(self.app).mostrar_tela_login()
 
     def cadastrar(self):
         nome = self.campo_nome.get()    

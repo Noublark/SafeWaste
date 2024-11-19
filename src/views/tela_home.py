@@ -41,12 +41,8 @@ class TelaHome:
         if self.msg_label:
             self.msg_label.place_forget()
 
-    def mostrar_tela_home(self, frame, img_label):
-        # Esconde a tela anterior se existir
-        if frame and img_label:
-            frame.place_forget()
-            img_label.place_forget()
-            
+    def mostrar_tela_home(self):
+
         # Esconde frames atuais se existirem
         self.esconder_frames()
 
@@ -86,14 +82,14 @@ class TelaHome:
         img_agenda = self.carregar_imagem("src/resources/static/agenda.png", (45, 45))
         self.img_label_agenda = CTkLabel(self.tela_home_frame_lateral, image=img_agenda, text="", fg_color="#985698", cursor="hand2")
         self.img_label_agenda._image = img_agenda
-        self.img_label_agenda.bind("<Button-1>", lambda event: self.tela_coleta.mostrar_tela_coleta(self.tela_home_frame, self.tela_home_frame_lateral, self.img_label_sair))
+        self.img_label_agenda.bind("<Button-1>", lambda event: self.tela_coleta.mostrar_tela_coleta(self.tela_home_frame_lateral))
         self.img_label_agenda.place(x=10, y=72.5)
 
         # Botão para gráfico
         img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
         self.img_label_grafico = CTkLabel(self.tela_home_frame_lateral, image=img_grafico, text="", fg_color="#985698", cursor="hand2")
         self.img_label_grafico._image = img_grafico
-        self.img_label_grafico.bind("<Button-1>", lambda event: self.tela_grafico.mostrar_tela_grafico(self.tela_home_frame, self.tela_home_frame_lateral))
+        self.img_label_grafico.bind("<Button-1>", lambda event: self.tela_grafico.mostrar_tela_grafico(self.tela_home_frame_lateral))
         self.img_label_grafico.place(x=12.5, y=187.5)
 
     def criar_tela_home_gestor_residuos(self):
@@ -126,14 +122,14 @@ class TelaHome:
         img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (50, 50))
         self.img_label_relatorio = CTkLabel(self.tela_home_frame_lateral, image=img_relatorio, text="", fg_color="#985698", cursor="hand2")
         self.img_label_relatorio._image = img_relatorio
-        self.img_label_relatorio.bind("<Button-1>", lambda event: self.tela_relatorio.mostrar_tela_relatorio(self.tela_home_frame, self.tela_home_frame_lateral))
+        self.img_label_relatorio.bind("<Button-1>", lambda event: self.tela_relatorio.mostrar_tela_relatorio(self.tela_home_frame_lateral))
         self.img_label_relatorio.place(x=8, y=72.5)
 
         # Botão para gráfico
         img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
         self.img_label_grafico = CTkLabel(self.tela_home_frame_lateral, image=img_grafico, text="", fg_color="#985698", cursor="hand2")
         self.img_label_grafico._image = img_grafico
-        self.img_label_grafico.bind("<Button-1>", lambda event: self.tela_grafico.mostrar_tela_grafico(self.tela_home_frame, self.tela_home_frame_lateral))
+        self.img_label_grafico.bind("<Button-1>", lambda event: self.tela_grafico.mostrar_tela_grafico(self.tela_home_frame_lateral))
         self.img_label_grafico.place(x=12.5, y=187.5)
 
     def carregar_imagem(self, caminho, tamanho):

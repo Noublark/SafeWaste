@@ -46,15 +46,11 @@ class TelaColeta:
             if label:
                 label.destroy()
 
-    def mostrar_tela_coleta(self, frame, frame2, img_label_sair):
+    def mostrar_tela_coleta(self, frame):
         self.esconder_todos_frames()
         
         if frame:
             frame.destroy()
-        if frame2:    
-            frame2.destroy()
-        if img_label_sair:
-            img_label_sair.destroy()
 
         # Criação do frame da tela de coleta
         self.tela_coleta_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
@@ -63,7 +59,7 @@ class TelaColeta:
         # Criação do botão "voltar"
         self.img_label_voltar = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
         self.img_label_voltar.image = self.img_tk
-        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar(frame, frame2))
+        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
         self.img_label_voltar.place(x=20, y=20)
 
         img_adicionar = Image.open("src/resources/static/adicionar.png")
@@ -135,10 +131,10 @@ class TelaColeta:
                 img_label_remover.bind("<Button-1>", lambda event, id=id_coleta: self.mostrar_popup_remover(id))
                 img_label_remover.place(x=113, y=y_inicial + i * espacamento_y)
 
-    def voltar(self, frame_anterior, img_label_anterior):
+    def voltar(self):
         from .tela_home import TelaHome
         self.esconder_todos_frames()
-        TelaHome(self.app).mostrar_tela_home(frame_anterior, img_label_anterior)
+        TelaHome(self.app).mostrar_tela_home()
 
     def mostrar_tela_agendar(self):
         self.esconder_todos_frames()
@@ -162,7 +158,7 @@ class TelaColeta:
         btn_agendar.place(x=100, y=290)
 
         self.img_label_voltar_coleta = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
-        self.img_label_voltar_coleta.bind("<Button-1>", lambda event: self.mostrar_tela_coleta(None, None, None))
+        self.img_label_voltar_coleta.bind("<Button-1>", lambda event: self.mostrar_tela_coleta(None))
         self.img_label_voltar_coleta.place(x=20, y=20)
 
     def agendar(self):
@@ -230,7 +226,7 @@ class TelaColeta:
         btn_editar.place(x=100, y=290)
 
         self.img_label_voltar_coleta1 = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
-        self.img_label_voltar_coleta1.bind("<Button-1>", lambda event: self.mostrar_tela_coleta(None, None, None))
+        self.img_label_voltar_coleta1.bind("<Button-1>", lambda event: self.mostrar_tela_coleta(None))
         self.img_label_voltar_coleta1.place(x=20, y=20)
 
     def mostrar_popup_remover(self, id_coleta):

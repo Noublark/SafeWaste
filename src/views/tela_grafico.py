@@ -12,11 +12,38 @@ class TelaGrafico:
         self.tela_grafico_frame = None
         self.img_label_voltar = None
         self.grafico = Grafico()
+        self.tabela_frame = None
+        self.img_label_voltar_tabela = None
+        self.tela_grafico_frame_lateral = None
+        self.img_label_tabela = None
 
-    def mostrar_tela_grafico(self, frame, frame2):
-        # Esconde os frames atuais
-        frame.place_forget()
-        frame2.place_forget()
+    def esconder_todos_frames(self):
+        frames = [
+            self.tela_grafico_frame,
+            self.tabela_frame,
+            self.tela_grafico_frame_lateral
+        ]
+        
+        labels = [
+            self.img_label_voltar,
+            self.img_label_voltar_tabela,
+            self.img_label_tabela
+        ]
+        
+        for frame in frames:
+            if frame:
+                frame.destroy()
+                
+        for label in labels:
+            if label:
+                label.destroy()
+
+    def mostrar_tela_grafico(self, frame):
+        
+        self.esconder_todos_frames()
+
+        if frame:
+            frame.destroy()
 
         # Criação do frame da tela de gráfico
         self.tela_grafico_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
@@ -31,21 +58,20 @@ class TelaGrafico:
         # Criação do botão "voltar"
         self.img_label_voltar = CTkLabel(self.app, image=img_voltar, text="", cursor="hand2")
         self.img_label_voltar.image = img_voltar
-        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar(frame, frame2))
+        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
         self.img_label_voltar.place(x=20, y=20)
 
         img_tabela = self.carregar_imagem("src/resources/static/tabela.png", (40, 40))
         self.img_label_tabela = CTkLabel(self.tela_grafico_frame_lateral, image=img_tabela, text="", fg_color="#985698", cursor="hand2")
         self.img_label_tabela._image = img_tabela
-        self.img_label_tabela.bind("<Button-1>", lambda event: self.mostrar_tabela(self.tela_grafico_frame, self.tela_grafico_frame_lateral, self.img_label_voltar))
+        self.img_label_tabela.bind("<Button-1>", lambda event: self.mostrar_tabela())
         self.img_label_tabela.place(x=12, y=120)
 
         self.mostrar_grafico(self.tela_grafico_frame)
 
-    def mostrar_tabela(self, frame, frame2, img_label):
-        frame.place_forget()
-        frame2.place_forget()
-        img_label.place_forget()
+    def mostrar_tabela(self):
+        
+        self.esconder_todos_frames()
 
         residuos_filtrados, colunas = self.grafico.exibir_dados_em_tabela()
 
@@ -90,19 +116,17 @@ class TelaGrafico:
         # Criação do botão "voltar"
         self.img_label_voltar_tabela = CTkLabel(self.app, image=img_voltar_tabela, text="", cursor="hand2")
         self.img_label_voltar_tabela.image = img_voltar_tabela
-        self.img_label_voltar_tabela.bind("<Button-1>", lambda event: self.voltar_grafico(frame, img_label))
+        self.img_label_voltar_tabela.bind("<Button-1>", lambda event: self.voltar_grafico())
         self.img_label_voltar_tabela.place(x=20, y=20)
 
-    def voltar(self, frame_anterior, img_label_anterior):
+    def voltar(self):
         from .tela_home import TelaHome
-        self.tela_grafico_frame.place_forget()
-        self.img_label_voltar.place_forget()
-        TelaHome(self.app).mostrar_tela_home(frame_anterior, img_label_anterior)
+        self.esconder_todos_frames()
+        TelaHome(self.app).mostrar_tela_home()
 
-    def voltar_grafico(self, frame, img_label):
-        self.tabela_frame.place_forget()
-        self.img_label_voltar_tabela.place_forget()
-        self.mostrar_tela_grafico(frame, img_label)
+    def voltar_grafico(self):
+        self.esconder_todos_frames()
+        self.mostrar_tela_grafico(None)
 
     def carregar_imagem(self, caminho, tamanho):
         img = Image.open(caminho)

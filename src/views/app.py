@@ -10,8 +10,7 @@ class App:
         self.app = CTk()
         self.app.title("SafeWaste")
 
-        icon_image = ImageTk.PhotoImage(file="src/resources/static/icon.png")
-        self.app.iconphoto(True, icon_image)
+        self.app.iconbitmap("src/resources/static/icon.ico")
 
         # Centraliza a janela na tela
         self.width = 800
@@ -41,13 +40,15 @@ class App:
         img = img.resize((250, 255), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
 
-        img_label = CTkLabel(self.frame_inicial, image=img_tk, text="")
-        img_label.image = img_tk  # Mantém uma referência forte para a imagem
-        img_label.image = img_tk
-        img_label.place(relx=0.5, rely=0.5, anchor="center")
+        self.img_label = CTkLabel(self.frame_inicial, image=img_tk, text="")
+        self.img_label.image = img_tk  # Mantém uma referência forte para a imagem
+        self.img_label.image = img_tk
+        self.img_label.place(relx=0.5, rely=0.5, anchor="center")
 
         # Configura evento de clique
-        self.app.bind("<Button-1>", lambda event: self.mostrar_tela_login(event, img_label))
+        self.app.bind("<Button-1>", lambda event: self.mostrar_tela_login(event))
 
-    def mostrar_tela_login(self, event, img_label):
-        self.tela_login.mostrar_tela_login(self.frame_inicial, img_label)
+    def mostrar_tela_login(self, event):
+        self.frame_inicial.place_forget()
+        self.img_label.place_forget()
+        self.tela_login.mostrar_tela_login()

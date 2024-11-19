@@ -20,9 +20,30 @@ class TelaRelatorio:
     def _carregar_imagem(self, caminho, tamanho):
         return ImageTk.PhotoImage(Image.open(caminho).resize(tamanho, Image.LANCZOS))
 
-    def mostrar_tela_relatorio(self, frame, frame2):
-        frame.place_forget()
-        frame2.place_forget()
+    def esconder_todos_frames(self):
+        frames = [
+            self.tela_relatorio_frame,
+            self.tela_ver_relatorio_frame
+        ]
+        
+        labels = [
+            self.img_label_voltar
+        ]
+        
+        for frame in frames:
+            if frame:
+                frame.destroy()
+                
+        for label in labels:
+            if label:
+                label.destroy()
+
+    def mostrar_tela_relatorio(self, frame):
+        self.esconder_todos_frames()
+
+        if frame:
+            frame.destroy()
+            frame = None
 
         self.tela_relatorio_frame = CTkScrollableFrame(
             master=self.app, 
@@ -34,7 +55,7 @@ class TelaRelatorio:
         self.tela_relatorio_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.img_label_voltar = CTkLabel(self.app, image=self.img_voltar, text="", cursor="hand2")
-        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar(frame, frame2))
+        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
         self.img_label_voltar.place(x=20, y=20)
 
         titulo = CTkLabel(self.tela_relatorio_frame, text="Relatórios", font=('Century Ghotic', 32))
@@ -71,6 +92,8 @@ class TelaRelatorio:
                 frame.grid_rowconfigure(i, weight=1)
 
     def ver_relatorio(self, nome_relatorio):
+        self.esconder_todos_frames()
+        
         self.tela_ver_relatorio_frame = CTkScrollableFrame(
             master=self.app,
             width=500, 
@@ -101,14 +124,15 @@ class TelaRelatorio:
         self.img_label_voltar.bind("<Button-1>", lambda e: self.voltar_relatorio())
         self.img_label_voltar.place(x=20, y=20)
 
-    def voltar(self, frame_anterior, img_label_anterior):
+    def voltar(self):
         from .tela_home import TelaHome
         self.tela_relatorio_frame.place_forget()
-        self.img_label_voltar.place_forget()
-        TelaHome(self.app).mostrar_tela_home(frame_anterior, img_label_anterior)
+        self.esconder_todos_frames()
+        TelaHome(self.app).mostrar_tela_home()
 
     def voltar_relatorio(self):
         if self.img_label_voltar:
+            self.tela_relatorio_frame.place_forget()
             self.tela_ver_relatorio_frame.place_forget()
             self.img_label_voltar.place_forget()
-        self.mostrar_tela_relatorio(self.tela_relatorio_frame, self.img_label_voltar)
+        self.mostrar_tela_relatorio(None)

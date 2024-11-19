@@ -20,11 +20,27 @@ class TelaLogin:
         self.tela_home = TelaHome(app)
         self.usuario_controller = UsuarioController()
 
-    def mostrar_tela_login(self, frame, img_label):
+    def esconder_todos_frames(self):
+        frames = [
+            self.login_frame
+        ]
+        
+        labels = [
+            self.img_label
+        ]
+        
+        for frame in frames:
+            if frame:
+                frame.destroy()
+                
+        for label in labels:
+            if label:
+                label.destroy()
+
+    def mostrar_tela_login(self):
         # Remove tela anterior
         self.app.unbind("<Button-1>")
-        frame.pack_forget()
-        img_label.place_forget()
+        self.esconder_todos_frames()
 
         # Configura frame de login
         self.login_frame = CTkFrame(self.app, width=400, height=605, corner_radius=15, border_color="")
@@ -49,7 +65,7 @@ class TelaLogin:
 
         # Link redefinir senha
         link_senha = CTkLabel(self.login_frame, text="Esqueceu a senha?", text_color="lightblue", cursor="hand2")
-        link_senha.bind("<Button-1>", lambda e: self.tela_redefinir_senha.mostrar_tela_redefinir_senha(self.login_frame, self.img_label))
+        link_senha.bind("<Button-1>", lambda e: self.tela_redefinir_senha.mostrar_tela_redefinir_senha())
         link_senha.place(x=250, y=320)
 
         # Botão login
@@ -59,7 +75,7 @@ class TelaLogin:
         # Links cadastro
         CTkLabel(self.login_frame, text="Não tem uma conta?", font=('Century Gothic', 12)).place(x=40, y=410)
         link_cadastro = CTkLabel(self.login_frame, text="Cadastre-se", text_color="lightblue", cursor="hand2")
-        link_cadastro.bind("<Button-1>", lambda e: self.tela_cadastro.mostrar_tela_cadastro(self.login_frame, self.img_label))
+        link_cadastro.bind("<Button-1>", lambda e: self.tela_cadastro.mostrar_tela_cadastro())
         link_cadastro.place(x=160, y=410)
 
     def verificar_login(self):
@@ -74,7 +90,8 @@ class TelaLogin:
 
         if "Login bem-sucedido" in resultado:
             common.nivel_acesso = tipo_usuario
-            self.tela_home.mostrar_tela_home(self.login_frame, self.img_label)
+            self.esconder_todos_frames()
+            self.tela_home.mostrar_tela_home()
         else:
             self._mostrar_erro(resultado)
 
