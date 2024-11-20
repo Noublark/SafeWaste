@@ -11,6 +11,7 @@ class TelaRelatorio:
         self.tela_ver_relatorio_frame = None
         self.servicos_relatorio = ServicosRelatorio()
         self.relatorio = Relatorio()
+        self.mensagens_temporarias = {} 
 
         # Carrega imagens uma única vez
         self.img_voltar = self._carregar_imagem("src/resources/static/back arrow.png", (40, 50))
@@ -75,16 +76,22 @@ class TelaRelatorio:
 
     def _adicionar_labels_e_imagens(self, relatorios, relatorios_config, nomes_relatórios):
         for i, nome in enumerate(nomes_relatórios):
+            # Label do nome do relatório
             CTkLabel(relatorios, text=nome, font=('Century Gothic', 16)).grid(
                 row=i, column=0, padx=5, pady=55, sticky="w", columnspan=2
             )
+
+            # Label para mensagem de confirmação (inicialmente vazia)
+            msg_label = CTkLabel(relatorios, text="", font=('Century Gothic', 12), text_color="green")
+            msg_label.grid(row=i, column=2, padx=5, pady=55, sticky="w")
+            self.mensagens_temporarias[nome] = msg_label
 
             img_ver = CTkLabel(relatorios_config, image=self.img_ver, text="", cursor="hand2")
             img_ver.bind("<Button-1>", lambda e, n=nome: self.ver_relatorio(n))
             img_ver.grid(row=i, column=0, padx=5, pady=55, sticky="nsew")
 
             img_baixar = CTkLabel(relatorios_config, image=self.img_baixar, text="", cursor="hand2")
-            img_baixar.bind("<Button-1>", lambda e, n=nome: self.relatorio.baixar_relatorio(n))
+            img_baixar.bind("<Button-1>", lambda e, n=nome: self._baixar_com_confirmacao(n))
             img_baixar.grid(row=i, column=1, padx=5, pady=55, sticky="nsew")
 
             for frame in (relatorios, relatorios_config):
@@ -136,3 +143,10 @@ class TelaRelatorio:
             self.tela_ver_relatorio_frame.place_forget()
             self.img_label_voltar.place_forget()
         self.mostrar_tela_relatorio(None)
+
+    def _baixar_com_confirmacao(self, nome_relatorio):
+        nome_arquivo = self.relatorio.baixar_relatorio(nome_relatorio)
+        msg_label = self.mensagens_temporarias.get(nome_relatorio)
+        if msg_label:
+            msg_label.configure(text=f"Salvo em {nome_arquivo}")
+            self.app.after(2000, lambda: msg_label.configure(text=""))

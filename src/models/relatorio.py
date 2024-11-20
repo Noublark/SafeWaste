@@ -47,19 +47,19 @@ class Relatorio:
 
 
     def baixar_relatorio(self, nome_relatorio):
-         # Exemplo de código para baixar o relatório em CSV
+    # Exemplo de código para baixar o relatório em CSV
         conteudo_relatorio = self.servicos.obter_conteudo_relatorio(nome_relatorio)
 
-        # Obtém o caminho para o diretório padrão de Downloads
+    # Obtém o caminho para o diretório padrão de Downloads
         caminho_downloads = os.path.join(os.path.expanduser('~'), 'Downloads')
 
-        # Cria o caminho completo do arquivo
+    # Cria o caminho completo do arquivo
         nome_arquivo = os.path.join(caminho_downloads, f"relatorio_{nome_relatorio}.csv")
 
-        # Salva o conteúdo no arquivo CSV
+    # Salva o conteúdo no arquivo CSV
         with open(nome_arquivo, "w") as arquivo:
             arquivo.write(conteudo_relatorio)
         
-        print(f"{nome_relatorio} salvo como arquivo CSV em {nome_arquivo}.")
+            return nome_arquivo 
 
 
