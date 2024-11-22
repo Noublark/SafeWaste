@@ -15,7 +15,7 @@ class TelaRedefinirSenha:
         self.img_label = None
         self.usuario_controller = UsuarioController()
 
-    def esconder_todos_frames(self):
+    def esconder_todos_frames(self): #Função para esconder todos os frames
         frames = [
             self.redefinir_senha_frame
         ]
@@ -37,7 +37,6 @@ class TelaRedefinirSenha:
         
         self.esconder_todos_frames()
 
-        # Botão voltar
         img_voltar = Image.open("src/resources/static/back arrow.png").resize((40, 50), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img_voltar)
         self.img_label_voltar = CTkLabel(self.app, image=img_tk, text="", cursor="hand2")
@@ -45,18 +44,15 @@ class TelaRedefinirSenha:
         self.img_label_voltar.bind("<Button-1>", lambda e: self.voltar())
         self.img_label_voltar.place(x=20, y=20)
 
-        # Frame principal
         self.redefinir_senha_frame = CTkFrame(self.app, width=400, height=605, corner_radius=15, border_color="")
         self.redefinir_senha_frame.place(relx=1.0, rely=0.5, anchor=tkinter.E)
 
-        # Imagem
         img = Image.open("src/resources/static/icon.png").resize((220, 200), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
         self.img_label = CTkLabel(self.app, image=img_tk, text="")
         self.img_label.image = img_tk
         self.img_label.place(relx=0.135, rely=0.5, anchor=tkinter.W)
 
-        # Campos
         CTkLabel(self.redefinir_senha_frame, text="Redefinir Senha", font=('Century Gothic', 32)).place(x=100, y=150)
         
         self.campo_email = CTkEntry(self.redefinir_senha_frame, placeholder_text="Digite seu email", width=330, corner_radius=10)
@@ -68,7 +64,6 @@ class TelaRedefinirSenha:
         self.campo_senha2 = CTkEntry(self.redefinir_senha_frame, placeholder_text="Digite sua senha novamente", width=330, show="*", corner_radius=10)
         self.campo_senha2.place(x=40, y=345)
 
-        # Botão redefinir
         CTkButton(self.redefinir_senha_frame, text="Redefinir", command=self.redefinir_senha,
                  fg_color="#985698", hover_color="#ee82ee", width=220, corner_radius=10).place(x=95, y=405)
 

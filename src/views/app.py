@@ -27,25 +27,22 @@ class App:
         self.app.mainloop()
 
     def setup_frame_inicial(self):
-        # Limpa widgets existentes
+       
         for widget in self.app.winfo_children():
             widget.destroy()
 
-        # Configura frame inicial
         self.frame_inicial = CTkFrame(master=self.app, fg_color="black", border_color="black")
         self.frame_inicial.pack(fill=BOTH, expand=TRUE)
 
-        # Carrega e exibe imagem
         img = Image.open("src/resources/static/icon title.png")
         img = img.resize((250, 255), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
 
         self.img_label = CTkLabel(self.frame_inicial, image=img_tk, text="")
-        self.img_label.image = img_tk  # Mantém uma referência forte para a imagem
+        self.img_label.image = img_tk 
         self.img_label.image = img_tk
         self.img_label.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Configura evento de clique
         self.app.bind("<Button-1>", lambda event: self.mostrar_tela_login(event))
 
     def mostrar_tela_login(self, event):

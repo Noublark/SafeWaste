@@ -17,7 +17,7 @@ class TelaGrafico:
         self.tela_grafico_frame_lateral = None
         self.img_label_tabela = None
 
-    def esconder_todos_frames(self):
+    def esconder_todos_frames(self): #Função para esconder todos os frames
         frames = [
             self.tela_grafico_frame,
             self.tabela_frame,
@@ -45,17 +45,14 @@ class TelaGrafico:
         if frame:
             frame.destroy()
 
-        # Criação do frame da tela de gráfico
         self.tela_grafico_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_grafico_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         self.tela_grafico_frame_lateral = CTkFrame(master=self.app, width=65, height=300, corner_radius=10, fg_color="#985698", border_color="")
         self.tela_grafico_frame_lateral.place(relx=1.0, rely=0.5, anchor=tk.E)
 
-        # Carrega e ajusta a imagem do botão "voltar"
         img_voltar = self.carregar_imagem("src/resources/static/back arrow.png", (40, 50))
 
-        # Criação do botão "voltar"
         self.img_label_voltar = CTkLabel(self.app, image=img_voltar, text="", cursor="hand2")
         self.img_label_voltar.image = img_voltar
         self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
@@ -75,7 +72,6 @@ class TelaGrafico:
 
         residuos_filtrados, colunas = self.grafico.exibir_dados_em_tabela()
 
-        # Quadro principal onde a Canvas será colocada
         self.tabela_frame = CTkFrame(master=self.app, width=650, height=450, corner_radius=15, border_color="")
         self.tabela_frame.place(relx=0.5, rely=0.5, anchor="center")
 
@@ -87,21 +83,18 @@ class TelaGrafico:
         self.scrollable_frame = CTkFrame(self.canvas, bg_color="#080808", corner_radius=15, border_color="")
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
-        # Barras de rolagem
+        # Scrollbars
         horizontal_scrollbar = tk.Scrollbar(self.tabela_frame, orient="horizontal", command=self.canvas.xview)
         horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
         vertical_scrollbar = tk.Scrollbar(self.tabela_frame, orient="vertical", command=self.canvas.yview)
         vertical_scrollbar.grid(row=0, column=1, sticky="ns")
 
-        # Configuração das barras de rolagem na Canvas
         self.canvas.configure(xscrollcommand=horizontal_scrollbar.set, yscrollcommand=vertical_scrollbar.set)
 
-        # Exibe cabeçalhos das colunas
         for i, coluna in enumerate(colunas):
             header_label = CTkLabel(self.scrollable_frame, text=coluna, width=20, anchor="w")
             header_label.grid(row=0, column=i, padx=5, pady=5)
 
-        # Exibe dados nas linhas
         for row_index, row in residuos_filtrados.iterrows():
             for col_index, item in enumerate(row):
                 cell_label = CTkLabel(self.scrollable_frame, text=str(item), width=20, anchor="w")
@@ -113,7 +106,6 @@ class TelaGrafico:
 
         img_voltar_tabela = self.carregar_imagem("src/resources/static/back arrow.png", (40, 50))
 
-        # Criação do botão "voltar"
         self.img_label_voltar_tabela = CTkLabel(self.app, image=img_voltar_tabela, text="", cursor="hand2")
         self.img_label_voltar_tabela.image = img_voltar_tabela
         self.img_label_voltar_tabela.bind("<Button-1>", lambda event: self.voltar_grafico())

@@ -18,12 +18,11 @@ class TelaColeta:
         self.img_label_voltar_coleta1 = None
         self.img_label_adicionar = None
         
-        # Carregar imagem voltar uma única vez
         self.img_voltar = Image.open("src/resources/static/back arrow.png")
         self.img_voltar = self.img_voltar.resize((40, 50), Image.LANCZOS)
         self.img_tk = ImageTk.PhotoImage(self.img_voltar)
 
-    def esconder_todos_frames(self):
+    def esconder_todos_frames(self): #Função para esconder todos os frames
         frames = [
             self.tela_coleta_frame,
             self.tela_agendar_coleta_frame, 
@@ -52,11 +51,9 @@ class TelaColeta:
         if frame:
             frame.destroy()
 
-        # Criação do frame da tela de coleta
         self.tela_coleta_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_coleta_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # Criação do botão "voltar"
         self.img_label_voltar = CTkLabel(self.app, image=self.img_tk, text="", cursor="hand2")
         self.img_label_voltar.image = self.img_tk
         self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
@@ -70,29 +67,24 @@ class TelaColeta:
         self.img_label_adicionar.bind("<Button-1>", lambda event: self.mostrar_tela_agendar())
         self.img_label_adicionar.place(x=460, y=30)
 
-        # Título da tela de coleta
         titulo = CTkLabel(self.tela_coleta_frame, text="Coletas", font=('Century Ghotic', 32))
         titulo.place(x=200, y=25)
 
-        # Frames para coletas e configurações
         coletas = CTkFrame(self.tela_coleta_frame, width=300, height=300, corner_radius=8, fg_color="#080808", border_color="")
         coletas.place(x=25, y=80)
 
         coletas_config = CTkFrame(self.tela_coleta_frame, width=150, height=300, corner_radius=8, fg_color="#985698", border_color="")
         coletas_config.place(x=325, y=80)
 
-        # Adiciona labels e imagens
         self.adicionar_labels_e_imagens(coletas, coletas_config)
 
     def adicionar_labels_e_imagens(self, coletas, coletas_config):
         y_inicial = 10
         espacamento_y = 60
         
-        # Obter coletas do usuário logado
         coletas_usuario = Coleta().exibir_coletas()
         
         if not coletas_usuario:
-            # Exibir mensagem caso não existam coletas
             label_vazio = CTkLabel(coletas, text="Nenhuma coleta agendada", font=('Century Gothic', 16))
             label_vazio.place(x=10, y=y_inicial)
         else:
@@ -107,7 +99,7 @@ class TelaColeta:
                 label.place(x=10, y=y_inicial + i * espacamento_y)
 
                 # Adiciona as imagens para ações
-                # Imagem de concluído
+
                 img_concluido = Image.open("src/resources/static/concluido.png").resize((30, 30), Image.LANCZOS)
                 img_tk1 = ImageTk.PhotoImage(img_concluido)
                 img_label_concluido = CTkLabel(coletas_config, image=img_tk1, text="", cursor="hand2")
@@ -115,7 +107,6 @@ class TelaColeta:
                 img_label_concluido.bind("<Button-1>", lambda event, id=id_coleta: self.mostrar_popup_concluido(id))
                 img_label_concluido.place(x=13, y=y_inicial + i * espacamento_y)
 
-                # Imagem de editar
                 img_editar = Image.open("src/resources/static/lapis.png").resize((30, 30), Image.LANCZOS)
                 img_tk2 = ImageTk.PhotoImage(img_editar)
                 img_label_editar = CTkLabel(coletas_config, image=img_tk2, text="", cursor="hand2")
@@ -123,7 +114,6 @@ class TelaColeta:
                 img_label_editar.bind("<Button-1>", lambda event, id=id_coleta: self.mostrar_tela_editar(id))
                 img_label_editar.place(x=63, y=y_inicial + i * espacamento_y)
 
-                # Imagem de remover
                 img_remover = Image.open("src/resources/static/lixeira.png").resize((30, 30), Image.LANCZOS)
                 img_tk3 = ImageTk.PhotoImage(img_remover)
                 img_label_remover = CTkLabel(coletas_config, image=img_tk3, text="", cursor="hand2")

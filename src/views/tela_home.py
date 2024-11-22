@@ -22,8 +22,7 @@ class TelaHome:
         self.tela_coleta = TelaColeta(self.app)
         self.tela_relatorio = TelaRelatorio(self.app)
 
-    def esconder_frames(self):
-        # Esconde todos os frames e labels
+    def esconder_frames(self): #Função para esconder todos os frames
         if self.tela_home_frame:
             self.tela_home_frame.place_forget()
         if self.tela_home_frame_lateral:
@@ -45,7 +44,6 @@ class TelaHome:
 
     def mostrar_tela_home(self):
 
-        # Esconde frames atuais se existirem
         self.esconder_frames()
 
         # Verifica o nível de acesso e cria a tela correspondente
@@ -55,39 +53,32 @@ class TelaHome:
             self.criar_tela_home_gestor_residuos()
 
     def criar_tela_home_operador(self):
-        # Cria o frame principal
         self.tela_home_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_home_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # Cria o frame lateral
         self.tela_home_frame_lateral = CTkFrame(master=self.app, width=65, height=300, corner_radius=10, border_color="", fg_color="#985698")
         self.tela_home_frame_lateral.place(relx=1.0, rely=0.5, anchor=tkinter.E)
 
-        # Botão de sair
         img_sair = self.carregar_imagem("src/resources/static/logout.png", (20, 20))
         self.img_label_sair = CTkLabel(self.app, image=img_sair, text="", cursor="hand2")
         self.img_label_sair.image = img_sair
         self.img_label_sair.bind("<Button-1>", lambda event: self.mostrar_popup_sair())
         self.img_label_sair.place(x=25, y=25)
 
-        # Imagem de alerta
         img_alerta = self.carregar_imagem("src/resources/static/safe.png", (100, 100))
         self.img_label_alerta = CTkLabel(self.tela_home_frame, image=img_alerta, text="")
         self.img_label_alerta._image = img_alerta
         self.img_label_alerta.place(x=200, y=110)
 
-        # Mensagem
         self.msg_label = CTkLabel(self.tela_home_frame, text="Resíduos em nível ok!", font=('Century Ghotic', 16))
         self.msg_label.place(x=175, y=240)
 
-        # Botão para agenda
         img_agenda = self.carregar_imagem("src/resources/static/agenda.png", (45, 45))
         self.img_label_agenda = CTkLabel(self.tela_home_frame_lateral, image=img_agenda, text="", fg_color="#985698", cursor="hand2")
         self.img_label_agenda._image = img_agenda
         self.img_label_agenda.bind("<Button-1>", lambda event: self.abrir_tela_coleta())
         self.img_label_agenda.place(x=10, y=72.5)
 
-        # Botão para gráfico
         img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
         self.img_label_grafico = CTkLabel(self.tela_home_frame_lateral, image=img_grafico, text="", fg_color="#985698", cursor="hand2")
         self.img_label_grafico._image = img_grafico
@@ -95,45 +86,37 @@ class TelaHome:
         self.img_label_grafico.place(x=12.5, y=187.5)
 
     def criar_tela_home_gestor_residuos(self):
-        # Cria o frame principal
         self.tela_home_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.tela_home_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # Cria o frame lateral
         self.tela_home_frame_lateral = CTkFrame(master=self.app, width=65, height=300, corner_radius=10, border_color="", fg_color="#985698")
         self.tela_home_frame_lateral.place(relx=1.0, rely=0.5, anchor=tkinter.E)
 
-        # Botão de sair
         img_sair = self.carregar_imagem("src/resources/static/logout.png", (20, 20))
         self.img_label_sair = CTkLabel(self.app, image=img_sair, text="", cursor="hand2")
         self.img_label_sair.image = img_sair
         self.img_label_sair.bind("<Button-1>", lambda event: self.mostrar_popup_sair())
         self.img_label_sair.place(x=25, y=25)
 
-        # Imagem de alerta
         img_alerta = self.carregar_imagem("src/resources/static/safe.png", (100, 100))
         self.img_label_alerta = CTkLabel(self.tela_home_frame, image=img_alerta, text="")
         self.img_label_alerta._image = img_alerta
         self.img_label_alerta.place(x=200, y=110)
 
-        # Mensagem
         self.msg_label = CTkLabel(self.tela_home_frame, text="Resíduos em nível ok!", font=('Century Ghotic', 16))
         self.msg_label.place(x=175, y=240)
 
-        # Botão para relatórios
         img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (50, 50))
         self.img_label_relatorio = CTkLabel(self.tela_home_frame_lateral, image=img_relatorio, text="", fg_color="#985698", cursor="hand2")
         self.img_label_relatorio._image = img_relatorio
         self.img_label_relatorio.bind("<Button-1>", lambda event: self.abrir_tela_relatorio())
         self.img_label_relatorio.place(x=8, y=72.5)
 
-        # Botão para gráfico
         img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
         self.img_label_grafico = CTkLabel(self.tela_home_frame_lateral, image=img_grafico, text="", fg_color="#985698", cursor="hand2")
         self.img_label_grafico._image = img_grafico
         self.img_label_grafico.bind("<Button-1>", lambda event: self.abrir_tela_grafico())
         self.img_label_grafico.place(x=12.5, y=187.5)
-
     
     def abrir_tela_coleta(self):
         self.esconder_frames()

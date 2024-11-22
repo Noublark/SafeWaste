@@ -13,15 +13,14 @@ class TelaRelatorio:
         self.relatorio = Relatorio()
         self.mensagens_temporarias = {} 
 
-        # Carrega imagens uma única vez
         self.img_voltar = self._carregar_imagem("src/resources/static/back arrow.png", (40, 50))
         self.img_ver = self._carregar_imagem("src/resources/static/olho.png", (30, 30))
         self.img_baixar = self._carregar_imagem("src/resources/static/download.png", (30, 30))
 
-    def _carregar_imagem(self, caminho, tamanho):
+    def _carregar_imagem(self, caminho, tamanho): 
         return ImageTk.PhotoImage(Image.open(caminho).resize(tamanho, Image.LANCZOS))
 
-    def esconder_todos_frames(self):
+    def esconder_todos_frames(self): #Função para esconder todos os frames
         frames = [
             self.tela_relatorio_frame,
             self.tela_ver_relatorio_frame
@@ -76,12 +75,10 @@ class TelaRelatorio:
 
     def _adicionar_labels_e_imagens(self, relatorios, relatorios_config, nomes_relatórios):
         for i, nome in enumerate(nomes_relatórios):
-            # Label do nome do relatório
             CTkLabel(relatorios, text=nome, font=('Century Gothic', 16)).grid(
                 row=i, column=0, padx=5, pady=55, sticky="w", columnspan=2
             )
 
-            # Label para mensagem de confirmação (inicialmente vazia)
             msg_label = CTkLabel(relatorios, text="", font=('Century Gothic', 12), text_color="green")
             msg_label.grid(row=i, column=2, padx=5, pady=55, sticky="w")
             self.mensagens_temporarias[nome] = msg_label
