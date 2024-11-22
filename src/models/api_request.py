@@ -2,7 +2,7 @@ import requests
 
 class APIRequest:
     def __init__(self):
-        self.url = "https://dadosabertos.ibama.gov.br/dados/RAPP/residuoSolidosGerador/relatorio.json"
+        self.url = "https://dadosabertos.ibama.gov.br/dados/RAPP/residuoSolidosGerador/relatorio.json" 
 
     def get_data(self):
         try:

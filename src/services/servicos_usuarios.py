@@ -7,7 +7,7 @@ class Servicos_Usuario:
     def __init__(self):
         self.conexao_db = ConexaoSQLite()
 
-    def criar_tabela_usuario(self):
+    def criar_tabela_usuario(self): # apagar depois
         """Cria a tabela 'usuario' no banco de dados, caso não exista."""
         conn = self.conexao_db.conexao()
         if conn is None:

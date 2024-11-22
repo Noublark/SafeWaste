@@ -6,7 +6,7 @@ class ServicosColeta:
     def __init__(self):
         self.conexao_db = ConexaoSQLite()
 
-    def criar_tabela(self):
+    def criar_tabela(self): # remover essa função depois
         """Cria a tabela de coleta, caso ainda não exista."""
         conn = self.conexao_db.conexao()
         if conn is None:

@@ -19,7 +19,7 @@ class TelaCadastro:
         self.img_label = None
         self.usuario_controller = UsuarioController()
 
-    def esconder_todos_frames(self): #Função para esconder todos os frames
+    def esconder_todos_frames(self): # função para esconder todos os frames
         frames = [
             self.cadastro_frame
         ]

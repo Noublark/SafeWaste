@@ -8,14 +8,14 @@ class Data:
         self.data = None
 
     def load_data(self):
-        # Carrega os dados apenas se ainda não foram carregados
+        # carrega os dados 
         if self.data is None:
             self.data = self.api.get_data()
 
         if 'data' in self.data:
             print(f"Dados carregados com sucesso: {len(self.data['data'])} registros.")
 
-            # Define as colunas que queremos ler
+            # define as colunas para leitura
             colunas = [
                 'cnpjGerador', 
                 'detalhe',
@@ -28,13 +28,13 @@ class Data:
                 'classificacaoResiduo'
             ]
 
-            # Lê apenas as colunas necessárias e já aplica o filtro durante a normalização
+            # le apenas as colunas necessárias
             result = pd.json_normalize(
                 self.data['data'],
-                max_level=0  # Evita processamento desnecessário de níveis aninhados
+                max_level=0  # evita processamento desnecessário de níveis aninhados 
             )[colunas]
 
-            # Aplica o filtro e limita os dados em uma única operação
+            # aplica o filtro e limita os dados 
             residuos_filtrados = result[colunas][result['classificacaoResiduo'] == 'Perigoso'].head(100)
 
             return residuos_filtrados, colunas

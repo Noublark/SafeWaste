@@ -20,7 +20,7 @@ class TelaLogin:
         self.tela_home = TelaHome(app)
         self.usuario_controller = UsuarioController()
 
-    def esconder_todos_frames(self): #Função para esconder todos os frames
+    def esconder_todos_frames(self): # função para esconder todos os frames
         frames = [
             self.login_frame
         ]

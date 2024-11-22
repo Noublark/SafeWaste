@@ -1,4 +1,4 @@
-def inicializacao_gestor_residuos(nome, email, senha, senha2):
+def inicializacao_gestor_residuos(nome, email, senha, senha2): # apagar depois
 
     from src.models.gestor_residuos import Gestor_Residuos
     from src.models.usuario import Usuario

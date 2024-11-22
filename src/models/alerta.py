@@ -1,6 +1,6 @@
 from src.common.common import enviar_email
 
-class Alerta:
+class Alerta: # apagar depois
     ''''''
 
     def __init__(self):

@@ -1,7 +1,7 @@
 from src.models.usuario import Usuario
 from src.common.common import NIVEL_ACESSO_OPERADOR
 
-class Operador(Usuario):
+class Operador(Usuario): # apagar depois
     '''classe para o operador que herda de usuario'''
 
     def __init__(self, nome, email, senha):

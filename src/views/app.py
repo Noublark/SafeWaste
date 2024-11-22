@@ -12,7 +12,7 @@ class App:
 
         self.app.iconbitmap("src/resources/static/icon.ico")
 
-        # Centraliza a janela na tela
+        # centraliza a janela na tela
         self.width = 800
         self.height = 600
         pos_x = (self.app.winfo_screenwidth() - self.width) // 2

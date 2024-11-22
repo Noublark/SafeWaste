@@ -20,7 +20,7 @@ class TelaRelatorio:
     def _carregar_imagem(self, caminho, tamanho): 
         return ImageTk.PhotoImage(Image.open(caminho).resize(tamanho, Image.LANCZOS))
 
-    def esconder_todos_frames(self): #Função para esconder todos os frames
+    def esconder_todos_frames(self): # função para esconder todos os frames
         frames = [
             self.tela_relatorio_frame,
             self.tela_ver_relatorio_frame

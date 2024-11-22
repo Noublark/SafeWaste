@@ -17,7 +17,7 @@ class TelaGrafico:
         self.tela_grafico_frame_lateral = None
         self.img_label_tabela = None
 
-    def esconder_todos_frames(self): #Função para esconder todos os frames
+    def esconder_todos_frames(self): # função para esconder todos os frames
         frames = [
             self.tela_grafico_frame,
             self.tabela_frame,
@@ -75,15 +75,15 @@ class TelaGrafico:
         self.tabela_frame = CTkFrame(master=self.app, width=650, height=450, corner_radius=15, border_color="")
         self.tabela_frame.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Canvas para rolagem bidirecional
+        # canvas para rolagem bidirecional
         self.canvas = tk.Canvas(self.tabela_frame, width=630, height=430)
         self.canvas.grid(row=0, column=0, sticky="nsew")
 
-        # Frame interno dentro da Canvas para conter os dados da tabela
+        # frame interno dentro da Canvas para conter os dados da tabela
         self.scrollable_frame = CTkFrame(self.canvas, bg_color="#080808", corner_radius=15, border_color="")
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
-        # Scrollbars
+        # scrollbars
         horizontal_scrollbar = tk.Scrollbar(self.tabela_frame, orient="horizontal", command=self.canvas.xview)
         horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
         vertical_scrollbar = tk.Scrollbar(self.tabela_frame, orient="vertical", command=self.canvas.yview)
@@ -100,7 +100,7 @@ class TelaGrafico:
                 cell_label = CTkLabel(self.scrollable_frame, text=str(item), width=20, anchor="w")
                 cell_label.grid(row=row_index + 1, column=col_index, padx=5, pady=5)
 
-        # Atualiza o tamanho do scrollable_frame para que a Canvas possa rolar corretamente
+        # atualiza o tamanho do scrollable_frame para que a Canvas possa rolar corretamente
         self.scrollable_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
@@ -129,7 +129,7 @@ class TelaGrafico:
         dados_grafico = self.grafico.exibir_grafico()
 
         if dados_grafico is not None:
-            # Gerar o gráfico
+            # gerar o gráfico
             fig, ax = plt.subplots(figsize=(10, 6))
             fig.patch.set_facecolor('#080808')
             ax.set_facecolor('white')
@@ -140,7 +140,7 @@ class TelaGrafico:
             ax.tick_params(axis='x', colors='white', rotation=45)
             ax.tick_params(axis='y', colors='white')
 
-            # Adicionar o gráfico ao canvas da tabela
+            # adicionar o gráfico ao canvas da tabela
             canvas = FigureCanvasTkAgg(fig, master=tela_grafico_frame)
             canvas.draw()
             canvas.get_tk_widget().place(relx=0.5, rely=0.5, anchor="center", width=475, height=375)

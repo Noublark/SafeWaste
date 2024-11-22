@@ -22,7 +22,7 @@ class TelaColeta:
         self.img_voltar = self.img_voltar.resize((40, 50), Image.LANCZOS)
         self.img_tk = ImageTk.PhotoImage(self.img_voltar)
 
-    def esconder_todos_frames(self): #Função para esconder todos os frames
+    def esconder_todos_frames(self): # função para esconder todos os frames
         frames = [
             self.tela_coleta_frame,
             self.tela_agendar_coleta_frame, 
@@ -89,16 +89,16 @@ class TelaColeta:
             label_vazio.place(x=10, y=y_inicial)
         else:
             for i, coleta in enumerate(coletas_usuario):
-                id_coleta = coleta[0]  # Coluna id_coleta (garanta que o id esteja sendo retornado pela consulta)
-                tipo_residuo = coleta[1]  # Coluna tipo_residuo
-                data = coleta[2]  # Coluna data
-                endereco = coleta[3]  # Coluna endereco
+                id_coleta = coleta[0]  # coluna id_coleta (garanta que o id esteja sendo retornado pela consulta)
+                tipo_residuo = coleta[1]  # coluna tipo_residuo
+                data = coleta[2]  # coluna data
+                endereco = coleta[3]  # coluna endereco
 
                 label_text = f"{tipo_residuo} - {data} - {endereco}"
                 label = CTkLabel(coletas, text=label_text, font=('Century Gothic', 16))
                 label.place(x=10, y=y_inicial + i * espacamento_y)
 
-                # Adiciona as imagens para ações
+                # adiciona as imagens para ações
 
                 img_concluido = Image.open("src/resources/static/concluido.png").resize((30, 30), Image.LANCZOS)
                 img_tk1 = ImageTk.PhotoImage(img_concluido)

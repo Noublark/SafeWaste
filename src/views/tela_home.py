@@ -22,7 +22,7 @@ class TelaHome:
         self.tela_coleta = TelaColeta(self.app)
         self.tela_relatorio = TelaRelatorio(self.app)
 
-    def esconder_frames(self): #Função para esconder todos os frames
+    def esconder_frames(self): # função para esconder todos os frames
         if self.tela_home_frame:
             self.tela_home_frame.place_forget()
         if self.tela_home_frame_lateral:
@@ -46,7 +46,7 @@ class TelaHome:
 
         self.esconder_frames()
 
-        # Verifica o nível de acesso e cria a tela correspondente
+        # verifica o nível de acesso e cria a tela correspondente
         if common.nivel_acesso == "Operador":
             self.criar_tela_home_operador()
         elif common.nivel_acesso == "Gestor_Residuos":

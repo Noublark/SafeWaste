@@ -1,7 +1,7 @@
 from src.models.usuario import Usuario
 from src.common.common import NIVEL_ACESSO_GESTOR_RESIDUOS
 
-class Gestor_Residuos(Usuario):
+class Gestor_Residuos(Usuario): # apagar depois
     '''classe para o gestor de residuos que herda de usuario'''
 
     def __init__(self, nome, email, senha):
