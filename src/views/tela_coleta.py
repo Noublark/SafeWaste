@@ -159,7 +159,7 @@ class TelaColeta:
         if tipo_residuo == "" or data == "" or endereco == "":
             label_erro = CTkLabel(self.tela_agendar_coleta_frame, text="Erro: Preencha todos os campos", text_color="red")
             label_erro.place(x=100, y=320)
-            self.tela_agendar_coleta_frame.after(1500, label_erro.destroy)
+            self.tela_agendar_coleta_frame.after(1000, label_erro.destroy)
             return
 
         data_formatada = self.formatar_data(data)
@@ -171,15 +171,15 @@ class TelaColeta:
             if "Coleta agendada com sucesso!" in resultado:
                 label_resultado = CTkLabel(self.tela_agendar_coleta_frame, text=resultado, text_color="green")
                 label_resultado.place(x=180, y=330)
-                self.tela_agendar_coleta_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
+                self.tela_agendar_coleta_frame.after(1000, lambda: (self.tela_agendar_coleta_frame.destroy(), self.mostrar_tela_coleta(None)))
             else:
                 label_resultado = CTkLabel(self.tela_agendar_coleta_frame, text=resultado, text_color="red")
                 label_resultado.place(x=180, y=330)
-                self.tela_agendar_coleta_frame.after(1500, label_resultado.destroy)
+                self.tela_agendar_coleta_frame.after(1000, label_resultado.destroy)
         else:
             label_erro1 = CTkLabel(self.tela_agendar_coleta_frame, text="Data inválida! O formato correto é DD/MM/YYYY.", text_color="red")
             label_erro1.place(x=130, y=330)
-            self.tela_agendar_coleta_frame.after(1500, label_erro1.destroy)
+            self.tela_agendar_coleta_frame.after(1000, label_erro1.destroy)
 
     def mostrar_popup_concluido(self, id_coleta):
         self.mostrar_popup_concluido_frame = CTkFrame(master=self.tela_coleta_frame, width=400, height=250, corner_radius=15, border_color="grey", fg_color="#080808")
@@ -255,7 +255,7 @@ class TelaColeta:
         if tipo_residuo == "" or data == "" or endereco == "":
             label_erro = CTkLabel(self.tela_editar_coleta_frame, text="Erro: Preencha todos os campos", text_color="red")
             label_erro.place(x=100, y=320)
-            self.tela_editar_coleta_frame.after(1500, label_erro.destroy)
+            self.tela_editar_coleta_frame.after(1000, label_erro.destroy)
             return
 
         data_formatada = self.formatar_data(data)
@@ -267,16 +267,15 @@ class TelaColeta:
             if "Coleta editada com sucesso!" in resultado:
                 label_resultado = CTkLabel(self.tela_editar_coleta_frame, text=resultado, text_color="green")
                 label_resultado.place(x=185, y=330)
-                label_resultado.update()
-                self.tela_editar_coleta_frame.after(1500, self.mostrar_tela_coleta(None, None, None))
+                self.tela_editar_coleta_frame.after(1000, lambda: (self.tela_editar_coleta_frame.destroy(), self.mostrar_tela_coleta(None)))
             else:
                 label_resultado = CTkLabel(self.tela_editar_coleta_frame, text=resultado, text_color="red")
                 label_resultado.place(x=180, y=330)
-                self.tela_editar_coleta_frame.after(1500, self.mostrar_tela_coleta(None, None, None))
+                self.tela_editar_coleta_frame.after(1000, lambda: (self.tela_editar_coleta_frame.destroy(), self.mostrar_tela_coleta(None)))
         else:
             label_erro1 = CTkLabel(self.tela_editar_coleta_frame, text="Data inválida! O formato correto é DD/MM/YYYY.", text_color="red")
             label_erro1.place(x=130, y=330)
-            self.tela_editar_coleta_frame.after(1500, label_erro1.destroy)
+            self.tela_editar_coleta_frame.after(1000, label_erro1.destroy)
 
     def concluir_coleta(self, id_coleta):
         coleta = Coleta()
@@ -285,11 +284,11 @@ class TelaColeta:
         if "Coleta concluída com sucesso!" in resultado:
             label_concluido = CTkLabel(self.mostrar_popup_concluido_frame, text=resultado, text_color="green")
             label_concluido.place(x=115, y=200)
-            self.mostrar_popup_concluido_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
+            self.mostrar_popup_concluido_frame.after(1000, lambda: (self.mostrar_popup_concluido_frame.destroy(), self.mostrar_tela_coleta(None)))
         else:
             label_erro = CTkLabel(self.mostrar_popup_concluido_frame, text=resultado, text_color="red")
             label_erro.place(x=115, y=200)
-            self.mostrar_popup_concluido_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
+            self.mostrar_popup_concluido_frame.after(1000, lambda: (self.mostrar_popup_concluido_frame.destroy(), self.mostrar_tela_coleta(None)))
 
     def remover_coleta(self, id_coleta):
         coleta = Coleta()
@@ -298,8 +297,8 @@ class TelaColeta:
         if "Coleta cancelada com sucesso!" in resultado:
             label_removido = CTkLabel(self.mostrar_popup_remover_frame, text=resultado, text_color="green")
             label_removido.place(x=115, y=200)
-            self.mostrar_popup_remover_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
+            self.mostrar_popup_remover_frame.after(1000, lambda: (self.mostrar_popup_remover_frame.destroy(), self.mostrar_tela_coleta(None)))
         else:
             label_erro = CTkLabel(self.mostrar_popup_remover_frame, text=resultado, text_color="red") 
             label_erro.place(x=115, y=200)
-            self.mostrar_popup_remover_frame.after(1500, lambda: self.mostrar_tela_coleta(None, None, None))
+            self.mostrar_popup_remover_frame.after(1000, lambda: (self.mostrar_popup_remover_frame.destroy(), self.mostrar_tela_coleta(None)))

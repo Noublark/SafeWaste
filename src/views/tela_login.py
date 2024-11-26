@@ -38,6 +38,10 @@ class TelaLogin:
                 label.destroy()
 
     def mostrar_tela_login(self):
+
+        for widget in self.app.winfo_children():
+            widget.destroy() 
+
         self.app.unbind("<Button-1>")
         self.esconder_todos_frames()
 

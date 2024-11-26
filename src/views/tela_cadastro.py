@@ -72,18 +72,20 @@ class TelaCadastro:
         self.campo_senha2.place(x=40, y=360)
         
         CTkCheckBox(self.cadastro_frame, text="Operador", variable=self.marcacao_operador, 
-                   command=self.atualizar_checkboxes).place(x=90, y=410)
+                   command=lambda: self.atualizar_checkboxes("operador")).place(x=90, y=410)
         CTkCheckBox(self.cadastro_frame, text="Gestor de Resíduos", variable=self.marcacao_gestor_residuos,
-                   command=self.atualizar_checkboxes).place(x=190, y=410)
+                   command=lambda: self.atualizar_checkboxes("gestor")).place(x=190, y=410)
         
         CTkButton(self.cadastro_frame, text="Cadastrar", command=self.cadastrar, 
                  fg_color="#985698", hover_color="#ee82ee", width=220, corner_radius=10).place(x=95, y=460)
 
-    def atualizar_checkboxes(self):
-        if self.marcacao_operador.get():
-            self.marcacao_gestor_residuos.set(0)
-        elif self.marcacao_gestor_residuos.get():
-            self.marcacao_operador.set(0)
+    def atualizar_checkboxes(self, checkbox_clicada):
+        if checkbox_clicada == "operador":
+            if self.marcacao_operador.get():
+                self.marcacao_gestor_residuos.set(0)
+        else:
+            if self.marcacao_gestor_residuos.get():
+                self.marcacao_operador.set(0)
 
     def voltar(self):
         from .tela_login import TelaLogin

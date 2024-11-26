@@ -2,6 +2,7 @@ from customtkinter import *
 from .tela_grafico import TelaGrafico
 from .tela_coleta import TelaColeta
 from .tela_relatorio import TelaRelatorio
+from src.controllers.sessao import SessaoUsuario
 from src.common import common
 from PIL import Image, ImageTk
 import tkinter
@@ -13,7 +14,7 @@ class TelaHome:
         self.tela_home_frame = None
         self.tela_home_frame_lateral = None
         self.img_label_sair = None
-        self.img_label_alerta = None
+        self.img_label_bem_vindo = None
         self.img_label_agenda = None
         self.img_label_grafico = None
         self.img_label_relatorio = None
@@ -29,8 +30,8 @@ class TelaHome:
             self.tela_home_frame_lateral.place_forget()
         if self.img_label_sair:
             self.img_label_sair.place_forget()
-        if self.img_label_alerta:
-            self.img_label_alerta.place_forget()
+        if self.img_label_bem_vindo:
+            self.img_label_bem_vindo.place_forget()
         if self.img_label_agenda:
             self.img_label_agenda.place_forget()
         if self.img_label_grafico:
@@ -63,13 +64,14 @@ class TelaHome:
         self.img_label_sair.bind("<Button-1>", lambda event: self.sair())
         self.img_label_sair.place(x=25, y=20)
 
-        img_alerta = self.carregar_imagem("src/resources/static/safe.png", (100, 100))
-        self.img_label_alerta = CTkLabel(self.tela_home_frame, image=img_alerta, text="")
-        self.img_label_alerta._image = img_alerta
-        self.img_label_alerta.place(x=200, y=110)
+        img_bem_vindo = self.carregar_imagem("src/resources/static/icon.png", (130, 120))
+        self.img_label_bem_vindo = CTkLabel(self.tela_home_frame, image=img_bem_vindo, text="")
+        self.img_label_bem_vindo._image = img_bem_vindo
+        self.img_label_bem_vindo.place(relx=0.52, rely=0.45, anchor=CENTER)
 
-        self.msg_label = CTkLabel(self.tela_home_frame, text="Resíduos em nível ok!", font=('Century Ghotic', 16))
-        self.msg_label.place(x=175, y=240)
+        nome_usuario = SessaoUsuario.get_usuario_logado()['nome']
+        self.msg_label = CTkLabel(self.tela_home_frame, text=f"Bem vindo, {nome_usuario}!", font=('Century Ghotic', 16))
+        self.msg_label.place(relx=0.5, rely=0.67, anchor=CENTER)
 
         img_agenda = self.carregar_imagem("src/resources/static/agenda.png", (45, 45))
         self.img_label_agenda = CTkLabel(self.tela_home_frame_lateral, image=img_agenda, text="", fg_color="#985698", cursor="hand2")
@@ -93,16 +95,21 @@ class TelaHome:
         img_sair = self.carregar_imagem("src/resources/static/logout.png", (20, 20))
         self.img_label_sair = CTkLabel(self.app, image=img_sair, text="", cursor="hand2")
         self.img_label_sair.image = img_sair
-        self.img_label_sair.bind("<Button-1>", lambda event: self.sair())
+        self.img_label_sair.bind("<Button-1>", lambda event: self.mostrar_popup_sair())
         self.img_label_sair.place(x=25, y=20)
 
-        img_alerta = self.carregar_imagem("src/resources/static/safe.png", (100, 100))
-        self.img_label_alerta = CTkLabel(self.tela_home_frame, image=img_alerta, text="")
-        self.img_label_alerta._image = img_alerta
-        self.img_label_alerta.place(x=200, y=110)
+        img_bem_vindo = self.carregar_imagem("src/resources/static/icon.png", (130, 120))
+        self.img_label_bem_vindo = CTkLabel(self.tela_home_frame, image=img_bem_vindo, text="")
+        self.img_label_bem_vindo._image = img_bem_vindo
+        self.img_label_bem_vindo.place(relx=0.52, rely=0.45, anchor=CENTER)
+        
+        nome_usuario = SessaoUsuario.get_usuario_logado()['nome']
+        self.msg_label = CTkLabel(self.tela_home_frame, text=f"Bem vindo, {nome_usuario}!", font=('Century Ghotic', 16))
+        self.msg_label.place(relx=0.5, rely=0.67, anchor=CENTER)
 
-        self.msg_label = CTkLabel(self.tela_home_frame, text="Resíduos em nível ok!", font=('Century Ghotic', 16))
-        self.msg_label.place(x=175, y=240)
+        self.btn_chat = CTkButton(master=self.tela_home_frame, text="Chat", command=self.mostrar_tela_chat, corner_radius=10, fg_color="#985698", hover_color="#a66da6", width=125
+        )
+        self.btn_chat.place(relx=0.5, rely=0.85, anchor=CENTER)
 
         img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (50, 50))
         self.img_label_relatorio = CTkLabel(self.tela_home_frame_lateral, image=img_relatorio, text="", fg_color="#985698", cursor="hand2")
@@ -153,9 +160,20 @@ class TelaHome:
             return None
 
     def sair(self):
-        try:
             from src.common.reset import reset_app
             self.esconder_frames()
             reset_app(self.app)
-        except Exception as e:
-            print(f"Erro ao sair: {str(e)}")
+
+    def mostrar_tela_chat(self):
+        # Esconde o frame atual
+        self.tela_home_frame.place_forget()
+        
+        # Cria o novo frame do chat
+        self.chat_frame = CTkFrame(
+            master=self.app,
+            width=500,
+            height=400,
+            corner_radius=15,
+            border_color=""
+        )
+        self.chat_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
