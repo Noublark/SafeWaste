@@ -19,6 +19,7 @@ class TelaHome:
         self.img_label_grafico = None
         self.img_label_relatorio = None
         self.msg_label = None
+        self.img_label_voltar = None
         self.tela_grafico = TelaGrafico(self.app)
         self.tela_coleta = TelaColeta(self.app)
         self.tela_relatorio = TelaRelatorio(self.app)
@@ -40,6 +41,8 @@ class TelaHome:
             self.img_label_relatorio.place_forget()
         if self.msg_label:
             self.msg_label.place_forget()
+        if self.img_label_voltar:
+            self.img_label_voltar.place_forget()
 
     def mostrar_tela_home(self):
 
@@ -61,7 +64,7 @@ class TelaHome:
         img_sair = self.carregar_imagem("src/resources/static/logout.png", (20, 20))
         self.img_label_sair = CTkLabel(self.app, image=img_sair, text="", cursor="hand2")
         self.img_label_sair.image = img_sair
-        self.img_label_sair.bind("<Button-1>", lambda event: self.sair())
+        self.img_label_sair.bind("<Button-1>", lambda event: self.mostrar_popup_sair())
         self.img_label_sair.place(x=25, y=20)
 
         img_bem_vindo = self.carregar_imagem("src/resources/static/icon.png", (130, 120))
@@ -137,6 +140,7 @@ class TelaHome:
         self.tela_relatorio.mostrar_tela_relatorio(self.tela_home_frame_lateral)
     
     def mostrar_popup_sair(self):
+        self.img_label_sair.unbind("<Button-1>")
         self.mostrar_popup_sair_frame = CTkFrame(master=self.tela_home_frame, width=400, height=250, corner_radius=15, border_color="", fg_color="#080808")
         self.mostrar_popup_sair_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
@@ -146,9 +150,14 @@ class TelaHome:
         btn_sim = CTkButton(master=self.mostrar_popup_sair_frame, text="Sim", command=lambda: self.sair(), corner_radius=10, fg_color="#985698", hover_color="#ee82ee", width=125)
         btn_sim.place(x=225, y=150)
 
-        btn_não = CTkButton(master=self.mostrar_popup_sair_frame, text="Não", command=self.mostrar_popup_sair_frame.destroy, corner_radius=10, fg_color="#b20000", hover_color="#e50000", width=125)
-        btn_não.place(x=50, y=150)
+        btn_nao = CTkButton(master=self.mostrar_popup_sair_frame, text="Não", command=lambda: self.acao_btn_nao(), corner_radius=10, fg_color="#b20000", hover_color="#e50000", width=125)
+        btn_nao.place(x=50, y=150)
+
     
+    def acao_btn_nao(self):
+        self.mostrar_popup_sair_frame.destroy()
+        self.img_label_sair.bind("<Button-1>", lambda event: self.mostrar_popup_sair())
+
     
     def carregar_imagem(self, caminho, tamanho):
         try:
@@ -165,15 +174,20 @@ class TelaHome:
             reset_app(self.app)
 
     def mostrar_tela_chat(self):
-        # Esconde o frame atual
-        self.tela_home_frame.place_forget()
-        
-        # Cria o novo frame do chat
-        self.chat_frame = CTkFrame(
-            master=self.app,
-            width=500,
-            height=400,
-            corner_radius=15,
-            border_color=""
-        )
+
+        self.esconder_frames()
+
+        self.chat_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
         self.chat_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        img_voltar = self.carregar_imagem("src/resources/static/back arrow.png", (40, 50))
+
+        self.img_label_voltar = CTkLabel(self.app, image=img_voltar, text="", cursor="hand2")
+        self.img_label_voltar.image = img_voltar
+        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
+        self.img_label_voltar.place(x=20, y=20)
+
+    def voltar(self):
+
+        self.esconder_frames()
+        self.mostrar_tela_home()
