@@ -67,45 +67,68 @@ class TelaGrafico:
         self.mostrar_grafico(self.tela_grafico_frame)
 
     def mostrar_tabela(self):
-        
         self.esconder_todos_frames()
 
         residuos_filtrados, colunas = self.grafico.exibir_dados_em_tabela()
 
-        self.tabela_frame = CTkFrame(master=self.app, width=650, height=450, corner_radius=15, border_color="")
+        self.tabela_frame = CTkFrame(master=self.app, width=600, height=400, corner_radius=15, border_color="")
         self.tabela_frame.place(relx=0.5, rely=0.5, anchor="center")
 
-        # canvas para rolagem bidirecional
-        self.canvas = tk.Canvas(self.tabela_frame, width=630, height=430)
-        self.canvas.grid(row=0, column=0, sticky="nsew")
+        # Canvas para rolagem bidirecional
+        self.canvas = tk.Canvas(self.tabela_frame, width=580, height=380, bg="#080808")
+        self.canvas.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
-        # frame interno dentro da Canvas para conter os dados da tabela
+        # Frame interno dentro da Canvas
         self.scrollable_frame = CTkFrame(self.canvas, bg_color="#080808", corner_radius=15, border_color="")
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
-        # scrollbars
+        # Scrollbars
         horizontal_scrollbar = tk.Scrollbar(self.tabela_frame, orient="horizontal", command=self.canvas.xview)
-        horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
+        horizontal_scrollbar.grid(row=1, column=0, sticky="ew", padx=10)
         vertical_scrollbar = tk.Scrollbar(self.tabela_frame, orient="vertical", command=self.canvas.yview)
-        vertical_scrollbar.grid(row=0, column=1, sticky="ns")
+        vertical_scrollbar.grid(row=0, column=1, sticky="ns", pady=10)
 
         self.canvas.configure(xscrollcommand=horizontal_scrollbar.set, yscrollcommand=vertical_scrollbar.set)
 
+        # Cabeçalhos da tabela
         for i, coluna in enumerate(colunas):
-            header_label = CTkLabel(self.scrollable_frame, text=coluna, width=20, anchor="w")
-            header_label.grid(row=0, column=i, padx=5, pady=5)
+            header_label = CTkLabel(
+                self.scrollable_frame, 
+                text=coluna,
+                width=80,
+                height=25,
+                fg_color="#985698",
+                corner_radius=8,
+                font=("Century Gothic", 11, "bold")
+            )
+            header_label.grid(row=0, column=i, padx=2, pady=2, sticky="nsew")
 
+        # Dados da tabela
         for row_index, row in residuos_filtrados.iterrows():
             for col_index, item in enumerate(row):
-                cell_label = CTkLabel(self.scrollable_frame, text=str(item), width=20, anchor="w")
-                cell_label.grid(row=row_index + 1, column=col_index, padx=5, pady=5)
+                cell_label = CTkLabel(
+                    self.scrollable_frame,
+                    text=str(item),
+                    width=80,
+                    height=20,
+                    fg_color="#1a1a1a",
+                    corner_radius=4,
+                    font=("Century Gothic", 10)
+                )
+                cell_label.grid(row=row_index + 1, column=col_index, padx=2, pady=1, sticky="nsew")
 
-        # atualiza o tamanho do scrollable_frame para que a Canvas possa rolar corretamente
+        # Configurar expansão das células
+        for i in range(len(colunas)):
+            self.scrollable_frame.grid_columnconfigure(i, weight=1)
+        for i in range(len(residuos_filtrados) + 1):
+            self.scrollable_frame.grid_rowconfigure(i, weight=1)
+
+        # Atualiza o tamanho do scrollable_frame
         self.scrollable_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
+        # Botão voltar
         img_voltar_tabela = self.carregar_imagem("src/resources/static/back arrow.png", (40, 50))
-
         self.img_label_voltar_tabela = CTkLabel(self.app, image=img_voltar_tabela, text="", cursor="hand2")
         self.img_label_voltar_tabela.image = img_voltar_tabela
         self.img_label_voltar_tabela.bind("<Button-1>", lambda event: self.voltar_grafico())

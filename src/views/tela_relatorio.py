@@ -100,30 +100,56 @@ class TelaRelatorio:
         
         self.tela_ver_relatorio_frame = CTkScrollableFrame(
             master=self.app,
-            width=500, 
-            height=400,
+            width=600, 
+            height=500,
             corner_radius=15,
             fg_color="#080808"
         )
         self.tela_ver_relatorio_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        # Frame para o título
+        titulo_frame = CTkFrame(
+            self.tela_ver_relatorio_frame,
+            fg_color="#985698",
+            corner_radius=8
+        )
+        titulo_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+
         CTkLabel(
-            self.tela_ver_relatorio_frame, 
+            titulo_frame, 
             text=f"Visualizar {nome_relatorio}",
-            font=('Century Ghotic', 32)
-        ).place(relx=0.5, rely=0.2, anchor=CENTER)
+            font=('Century Gothic', 32),
+            text_color="white"
+        ).pack(pady=10)
+
+        # Frame para o conteúdo
+        conteudo_frame = CTkFrame(
+            self.tela_ver_relatorio_frame,
+            fg_color="#1a1a1a",
+            corner_radius=8
+        )
+        conteudo_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
         conteudo = self.servicos_relatorio.obter_conteudo_relatorio(nome_relatorio)
         texto = self.relatorio.carregar_relatorio(conteudo)
         
+        # Quebra o texto em linhas nos pontos e vírgulas
+        texto_formatado = texto.replace(';', ';\n')
+        
         CTkLabel(
-            self.tela_ver_relatorio_frame,
-            text=texto,
+            conteudo_frame,
+            text=texto_formatado,
             font=('Century Gothic', 14),
-            justify="left",
-            fg_color="#080808"
-        ).grid(row=1, column=0, padx=10, pady=80, sticky="w")
+            justify="left", 
+            wraplength=550,
+            fg_color="#1a1a1a",
+            text_color="white"
+        ).pack(padx=20, pady=20, expand=True, fill="both")
 
+        # Configurar expansão da coluna
+        self.tela_ver_relatorio_frame.grid_columnconfigure(0, weight=1)
+
+        # Botão voltar
         self.img_label_voltar = CTkLabel(self.app, image=self.img_voltar, text="", cursor="hand2")
         self.img_label_voltar.bind("<Button-1>", lambda e: self.voltar_relatorio())
         self.img_label_voltar.place(x=20, y=20)

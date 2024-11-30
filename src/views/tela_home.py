@@ -110,9 +110,9 @@ class TelaHome:
         self.msg_label = CTkLabel(self.tela_home_frame, text=f"Bem vindo, {nome_usuario}!", font=('Century Ghotic', 16))
         self.msg_label.place(relx=0.5, rely=0.67, anchor=CENTER)
 
-        self.btn_chat = CTkButton(master=self.tela_home_frame, text="Chat", command=self.mostrar_tela_chat, corner_radius=10, fg_color="#985698", hover_color="#a66da6", width=125
-        )
-        self.btn_chat.place(relx=0.5, rely=0.85, anchor=CENTER)
+        #self.btn_chat = CTkButton(master=self.tela_home_frame, text="Chat", command=self.mostrar_tela_chat, corner_radius=10, fg_color="#985698", hover_color="#a66da6", width=125
+        #)
+        #self.btn_chat.place(relx=0.5, rely=0.85, anchor=CENTER)
 
         img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (50, 50))
         self.img_label_relatorio = CTkLabel(self.tela_home_frame_lateral, image=img_relatorio, text="", fg_color="#985698", cursor="hand2")
