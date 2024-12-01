@@ -1,5 +1,4 @@
 from src.services.servicos_usuarios import Servicos_Usuario
-from src.models.grafico import Grafico
 
 class Usuario:
     '''classe para o usuário do SafeWaste'''

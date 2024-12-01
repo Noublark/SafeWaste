@@ -1,6 +1,8 @@
 from PIL import Image, ImageTk
 from customtkinter import CTk, CTkFrame, CTkLabel, set_appearance_mode, set_default_color_theme, BOTH, TRUE
 from .tela_login import TelaLogin
+import threading
+import time
 
 class App:
     def __init__(self):
@@ -43,9 +45,9 @@ class App:
         self.img_label.image = img_tk
         self.img_label.place(relx=0.5, rely=0.5, anchor="center")
 
-        self.app.bind("<Button-1>", lambda event: self.mostrar_tela_login(event))
-
-    def mostrar_tela_login(self, event):
+        self.app.after(2000, self.mostrar_tela_login)
+    
+    def mostrar_tela_login(self):
         self.frame_inicial.place_forget()
         self.img_label.place_forget()
         self.tela_login.mostrar_tela_login()

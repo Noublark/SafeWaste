@@ -42,7 +42,6 @@ class TelaLogin:
         for widget in self.app.winfo_children():
             widget.destroy() 
 
-        self.app.unbind("<Button-1>")
         self.esconder_todos_frames()
 
         self.login_frame = CTkFrame(self.app, width=400, height=605, corner_radius=15, border_color="")

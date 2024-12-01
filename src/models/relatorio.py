@@ -13,14 +13,19 @@ class Relatorio:
     def gerar_relatorio(self):
         
         # carrega os dados e as colunas
-        residuos_filtrados, colunas = self.data.load_data()
-    
+        residuos_filtrados = self.data.load_data()
+        
+        # usa os dados filtrados diretamente
+        if residuos_filtrados.empty:
+            print("Nenhum dado encontrado após o filtro.")
+            return
+
         # converte o tipo da coluna 'anoGeracao' para inteiro
-        anos = [ano for ano in residuos_filtrados['anoGeracao'].unique() if ano.isdigit() and int(ano) >= 2012]
+        anos = [ano for ano in residuos_filtrados['anoGeracao'].dt.year.unique() if ano >= 2012]
     
         for ano in anos:
             # filtra dados para o ano específico
-            dados_ano = residuos_filtrados[residuos_filtrados['anoGeracao'] == ano]
+            dados_ano = residuos_filtrados[residuos_filtrados['anoGeracao'].dt.year == ano]
         
             if dados_ano.empty:
                 print(f"Nenhum dado encontrado para o ano {ano}.")
@@ -31,9 +36,6 @@ class Relatorio:
 
             # salva no banco de dados
             self.servicos.salvar_relatorio_bd(dados_ano, ano)
-
-            print("testando 2")
-
     
     def carregar_relatorio(self, conteudo_relatorio):
 

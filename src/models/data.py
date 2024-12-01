@@ -1,40 +1,21 @@
-from src.models.api_request import APIRequest
+from turtle import st
 import pandas as pd
 
 class Data:
 
     def __init__(self):
-        self.api = APIRequest()
         self.data = None
 
+    #@st.cache_data
     def load_data(self):
-        # carrega os dados 
-        if self.data is None:
-            self.data = self.api.get_data()
+        
+        df = pd.read_json("src/resources/json/residuos_solidos.json")
+        self.data = df
+    
+        # converter 'anoGeracao' para datetime
+        self.data['anoGeracao'] = pd.to_datetime(self.data['anoGeracao'], format='%Y')
+    
+        return self.data
 
-        if 'data' in self.data:
-            print(f"Dados carregados com sucesso: {len(self.data['data'])} registros.")
 
-            # define as colunas para leitura
-            colunas = [
-                'cnpjGerador', 
-                'detalhe',
-                'estado', 
-                'municipio',  
-                'anoGeracao', 
-                'tipoResiduo', 
-                'quantidadeGerada', 
-                'unidade',
-                'classificacaoResiduo'
-            ]
 
-            # le apenas as colunas necessárias
-            result = pd.json_normalize(
-                self.data['data'],
-                max_level=0  # evita processamento desnecessário de níveis aninhados 
-            )[colunas]
-
-            # aplica o filtro e limita os dados 
-            residuos_filtrados = result[colunas][result['classificacaoResiduo'] == 'Perigoso'].head(100)
-
-            return residuos_filtrados, colunas

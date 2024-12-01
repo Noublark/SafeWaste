@@ -15,27 +15,28 @@ class ServicosRelatorio:
 
         try:
             # carrega os dados do JSON
-            residuos_filtrados, _ = self.data.load_data()
+            resultado = self.data.load_data()
 
-            residuos_filtrados['anoGeracao'] = pd.to_numeric(residuos_filtrados['anoGeracao'], errors='coerce')
+            
+            if isinstance(resultado, pd.DataFrame):
+                residuos_filtrados = resultado
+            elif isinstance(resultado, tuple) and len(resultado) > 0:
+                residuos_filtrados = resultado[0]  
+            else:
+                print("Erro: O retorno de load_data() não é um DataFrame ou tupla válida.")
+                return
 
-            # obtém o intervalo de anos para criação das tabelas
-            ultimo_ano = residuos_filtrados['anoGeracao'].max()
+            residuos_filtrados['anoGeracao'] = pd.to_datetime(residuos_filtrados['anoGeracao'], errors='coerce')
+            ultimo_ano = residuos_filtrados['anoGeracao'].dt.year.max()  # Extrai o ano do Timestamp
             anos = range(2012, int(ultimo_ano) + 1)
+            
+            colunas = ", ".join([f"{coluna} TEXT" for coluna in residuos_filtrados.columns])
 
             # cria uma tabela para cada ano no intervalo de 2012 até o último ano
             for ano in anos:
                 cursor.execute(f"""
                     CREATE TABLE IF NOT EXISTS relatorio_{ano} (
-                        cnpjGerador TEXT,
-                        detalhe TEXT,
-                        estado TEXT,
-                        municipio TEXT,
-                        anoGeracao TEXT,
-                        tipoResiduo TEXT,
-                        quantidadeGerada TEXT,
-                        unidade TEXT,
-                        classificacaoResiduo TEXT
+                        {colunas}
                     )
                 """)
                 conn.commit()
@@ -43,6 +44,8 @@ class ServicosRelatorio:
 
         except (sqlite3.Error) as erro:
             print(f"Erro ao criar as tabelas: {erro}")
+        except Exception as e:
+            print(f"Ocorreu um erro inesperado: {e}")
         finally:
             conn.close()
 
@@ -55,11 +58,14 @@ class ServicosRelatorio:
             for _, row in dados.iterrows():
                 print(f"Inserindo dados para o CNPJ {row['cnpjGerador']} no ano {ano}: {tuple(row)}")
                 
+                ano_geracao_str = row['anoGeracao'].strftime('%Y-%m-%d') if isinstance(row['anoGeracao'], pd.Timestamp) else row['anoGeracao']
+                
                 cursor.execute(f"""
-                    INSERT INTO relatorio_{ano} (cnpjGerador, detalhe, estado, municipio, anoGeracao, 
-                    tipoResiduo, quantidadeGerada, unidade, classificacaoResiduo)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, tuple(row))
+                    INSERT INTO relatorio_{ano} (cnpjGerador, estado, municipio, anoGeracao, 
+                    tipoResiduo, quantidadeGerada, classificacaoResiduo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (row['cnpjGerador'], row['estado'], row['municipio'], ano_geracao_str, 
+                      row['tipoResiduo'], row['quantidadeGerada'], row['classificacaoResiduo']))
 
             conn.commit()
             print(f"Relatório de {ano} salvo no banco de dados.")
@@ -95,8 +101,8 @@ class ServicosRelatorio:
             if not nome_relatorio.startswith("relatorio_"):
                 nome_relatorio = f"relatorio_{nome_relatorio}"
             
-            # consulta para acessar a tabela
-            query = f"SELECT * FROM {nome_relatorio}"
+            # consulta para acessar a tabela, limitando a 50 linhas
+            query = f"SELECT * FROM {nome_relatorio} LIMIT 50"
             cursor.execute(query)
             
             conteudo = cursor.fetchall()
@@ -112,22 +118,5 @@ class ServicosRelatorio:
             print(f"Erro ao obter o conteúdo do relatório {nome_relatorio}: {erro}")
             return f"Erro: {erro}"
 
-        finally:
-            conn.close()
-
-    # Função para apagar todas as tabelas de relatórios
-    def apagar_tabelas(self): # apagar dps
-        conn = self.conexao_db.conexao()
-        cursor = conn.cursor()
-        try:
-            # Consulta para apagar todas as tabelas de relatórios
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'relatorio_%';")
-            tabelas = cursor.fetchall()
-            for tabela in tabelas:
-                cursor.execute(f"DROP TABLE IF EXISTS {tabela[0]}")
-            conn.commit()
-            print("Todas as tabelas de relatórios foram apagadas.")
-        except sqlite3.Error as erro:
-            print(f"Erro ao apagar as tabelas de relatórios: {erro}")
         finally:
             conn.close()

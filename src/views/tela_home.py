@@ -80,13 +80,7 @@ class TelaHome:
         self.img_label_agenda = CTkLabel(self.tela_home_frame_lateral, image=img_agenda, text="", fg_color="#985698", cursor="hand2")
         self.img_label_agenda._image = img_agenda
         self.img_label_agenda.bind("<Button-1>", lambda event: self.tela_coleta.mostrar_tela_coleta(self.tela_home_frame_lateral))
-        self.img_label_agenda.place(x=10, y=72.5)
-
-        img_grafico = self.carregar_imagem("src/resources/static/grafico.png", (40, 40))
-        self.img_label_grafico = CTkLabel(self.tela_home_frame_lateral, image=img_grafico, text="", fg_color="#985698", cursor="hand2")
-        self.img_label_grafico._image = img_grafico
-        self.img_label_grafico.bind("<Button-1>", lambda event: self.tela_grafico.mostrar_tela_grafico(self.tela_home_frame_lateral))
-        self.img_label_grafico.place(x=12.5, y=187.5)
+        self.img_label_agenda.place(x=10, y=120)
 
     def criar_tela_home_gestor_residuos(self):
         self.tela_home_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
@@ -109,10 +103,6 @@ class TelaHome:
         nome_usuario = SessaoUsuario.get_usuario_logado()['nome']
         self.msg_label = CTkLabel(self.tela_home_frame, text=f"Bem vindo, {nome_usuario}!", font=('Century Ghotic', 16))
         self.msg_label.place(relx=0.5, rely=0.67, anchor=CENTER)
-
-        #self.btn_chat = CTkButton(master=self.tela_home_frame, text="Chat", command=self.mostrar_tela_chat, corner_radius=10, fg_color="#985698", hover_color="#a66da6", width=125
-        #)
-        #self.btn_chat.place(relx=0.5, rely=0.85, anchor=CENTER)
 
         img_relatorio = self.carregar_imagem("src/resources/static/relatorio.png", (50, 50))
         self.img_label_relatorio = CTkLabel(self.tela_home_frame_lateral, image=img_relatorio, text="", fg_color="#985698", cursor="hand2")
@@ -172,20 +162,6 @@ class TelaHome:
             from src.common.reset import reset_app
             self.esconder_frames()
             reset_app(self.app)
-
-    def mostrar_tela_chat(self):
-
-        self.esconder_frames()
-
-        self.chat_frame = CTkFrame(master=self.app, width=500, height=400, corner_radius=15, border_color="")
-        self.chat_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
-
-        img_voltar = self.carregar_imagem("src/resources/static/back arrow.png", (40, 50))
-
-        self.img_label_voltar = CTkLabel(self.app, image=img_voltar, text="", cursor="hand2")
-        self.img_label_voltar.image = img_voltar
-        self.img_label_voltar.bind("<Button-1>", lambda event: self.voltar())
-        self.img_label_voltar.place(x=20, y=20)
 
     def voltar(self):
 
