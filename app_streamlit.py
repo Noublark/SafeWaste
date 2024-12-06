@@ -56,9 +56,9 @@ st.header("Visão Geral do Dashboard")
 col1, col2, col3, col4 = st.columns(4)
 
 # quantidadeGerada == num
-filtered_df['quantidadeGerada'] = filtered_df['quantidadeGerada'].str.replace('.', '', regex=False)  # Remove os pontos
-filtered_df['quantidadeGerada'] = filtered_df['quantidadeGerada'].str.replace(',', '.', regex=False)  # Substitui a vírgula por ponto
-filtered_df['quantidadeGerada'] = pd.to_numeric(filtered_df['quantidadeGerada'], errors='coerce')  # Converte para float
+filtered_df['quantidadeGerada'] = filtered_df['quantidadeGerada'].str.replace('.', '', regex=False)  # remove os pontos
+filtered_df['quantidadeGerada'] = filtered_df['quantidadeGerada'].str.replace(',', '.', regex=False)  # substitui a vírgula por ponto
+filtered_df['quantidadeGerada'] = pd.to_numeric(filtered_df['quantidadeGerada'], errors='coerce')  # converte para float
 
 # verificar se existem valores NaN e substituí-los por 0 
 filtered_df['quantidadeGerada'].fillna(0, inplace=True)
