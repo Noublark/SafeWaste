@@ -26,28 +26,28 @@ df = data.load_data()
 st.sidebar.header("Filtros")
 
 # slider de anos
-year_min = max(2012, df['anoGeracao'].dt.year.min())  
-year_max = df['anoGeracao'].dt.year.max()
-selected_years = st.sidebar.slider("Selecionar Faixa de Anos", year_min, year_max, (year_min, year_max))
+ano_min = max(2012, df['anoGeracao'].dt.year.min())  
+ano_max = df['anoGeracao'].dt.year.max()
+anos_selecionados = st.sidebar.slider("Selecionar Faixa de Anos", ano_min, ano_max, (ano_min, ano_max))
 
 # seleção de estados
-states = sorted(df['estado'].unique())
+estados = sorted(df['estado'].unique())
 if st.sidebar.button("Selecionar Todos os Estados"):
-    selected_states = states
+    estados_selecionados = estados
 else:
-    selected_states = st.sidebar.multiselect("Selecionar Estados", states, default=states)
+    estados_selecionados = st.sidebar.multiselect("Selecionar Estados", estados, default=estados)
 
 # seleção de tipos de resíduos
-waste_types = sorted(df['tipoResiduo'].unique())
+tipos_residuos = sorted(df['tipoResiduo'].unique())
 if st.sidebar.button("Selecionar Todos os Tipos de Resíduos"):
-    selected_waste_types = waste_types
+    tipos_residuos_selecionados = tipos_residuos
 else:
-    selected_waste_types = st.sidebar.multiselect("Selecionar Tipos de Resíduos", waste_types, default=waste_types)
+    tipos_residuos_selecionados = st.sidebar.multiselect("Selecionar Tipos de Resíduos", tipos_residuos, default=tipos_residuos)
 
-filtered_df = df[
-    (df['anoGeracao'].dt.year.between(selected_years[0], selected_years[1])) &
-    (df['estado'].isin(selected_states)) &
-    (df['tipoResiduo'].isin(selected_waste_types))
+df_filtrado = df[
+    (df['anoGeracao'].dt.year.between(anos_selecionados[0], anos_selecionados[1])) &
+    (df['estado'].isin(estados_selecionados)) &
+    (df['tipoResiduo'].isin(tipos_residuos_selecionados))
 ]
 
 st.header("Visão Geral do Dashboard")
@@ -56,52 +56,52 @@ st.header("Visão Geral do Dashboard")
 col1, col2, col3, col4 = st.columns(4)
 
 # quantidadeGerada == num
-filtered_df['quantidadeGerada'] = filtered_df['quantidadeGerada'].str.replace('.', '', regex=False)  # remove os pontos
-filtered_df['quantidadeGerada'] = filtered_df['quantidadeGerada'].str.replace(',', '.', regex=False)  # substitui a vírgula por ponto
-filtered_df['quantidadeGerada'] = pd.to_numeric(filtered_df['quantidadeGerada'], errors='coerce')  # converte para float
+df_filtrado['quantidadeGerada'] = df_filtrado['quantidadeGerada'].str.replace('.', '', regex=False)  # remove os pontos
+df_filtrado['quantidadeGerada'] = df_filtrado['quantidadeGerada'].str.replace(',', '.', regex=False)  # substitui a vírgula por ponto
+df_filtrado['quantidadeGerada'] = pd.to_numeric(df_filtrado['quantidadeGerada'], errors='coerce')  # converte para float
 
 # verificar se existem valores NaN e substituí-los por 0 
-filtered_df['quantidadeGerada'].fillna(0, inplace=True)
+df_filtrado['quantidadeGerada'].fillna(0, inplace=True)
 
-total_waste_generated = filtered_df['quantidadeGerada'].sum()
-num_generators = filtered_df['cnpjGerador'].nunique()
-num_municipalities = filtered_df['municipio'].nunique()
-num_waste_types = filtered_df['tipoResiduo'].nunique()
+total_residuos_gerados = df_filtrado['quantidadeGerada'].sum()
+num_geradores = df_filtrado['cnpjGerador'].nunique()
+num_municipios = df_filtrado['municipio'].nunique()
+num_tipos_residuos = df_filtrado['tipoResiduo'].nunique()
 
 with col1:
-    st.metric("Total de Resíduos Gerados", f"{total_waste_generated:,.2f} toneladas")
+    st.metric("Total de Resíduos Gerados", f"{total_residuos_gerados:,.2f} toneladas")
 
 with col2:
-    st.metric("Número de Geradores", num_generators)
+    st.metric("Número de Geradores", num_geradores)
 
 with col3:
-    st.metric("Número de Municípios", num_municipalities)
+    st.metric("Número de Municípios", num_municipios)
 
 with col4:
-    st.metric("Tipos de Resíduos Perigosos", num_waste_types)
+    st.metric("Tipos de Resíduos Perigosos", num_tipos_residuos)
 
 st.subheader("Geração de Resíduos Perigosos ao Longo do Tempo")
-yearly_waste = filtered_df.groupby(filtered_df['anoGeracao'].dt.year)['quantidadeGerada'].sum().reset_index()
-fig_time = px.line(yearly_waste, x='anoGeracao', y='quantidadeGerada', 
+df_residuos_anual = df_filtrado.groupby(df_filtrado['anoGeracao'].dt.year)['quantidadeGerada'].sum().reset_index()
+fig_tempo = px.line(df_residuos_anual, x='anoGeracao', y='quantidadeGerada', 
                    labels={'anoGeracao': 'Ano', 'quantidadeGerada': 'Resíduos Gerados (toneladas)'},
                    color_discrete_sequence=['#985698'])
-st.plotly_chart(fig_time, use_container_width=True)
+st.plotly_chart(fig_tempo, use_container_width=True)
 
 st.subheader("Distribuição de Resíduos Perigosos por Estado")
-state_waste = filtered_df.groupby('estado')['quantidadeGerada'].sum().sort_values(ascending=False).reset_index()
-fig_state = px.bar(state_waste, x='estado', y='quantidadeGerada', 
+df_residuos_estado = df_filtrado.groupby('estado')['quantidadeGerada'].sum().sort_values(ascending=False).reset_index()
+fig_estado = px.bar(df_residuos_estado, x='estado', y='quantidadeGerada', 
                    labels={'estado': 'Estado', 'quantidadeGerada': 'Resíduos Gerados (toneladas)'},
                    color_discrete_sequence=['#985698'])
-st.plotly_chart(fig_state, use_container_width=True)
+st.plotly_chart(fig_estado, use_container_width=True)
 
 st.subheader("Principais Tipos de Resíduos Perigosos")
-waste_types = filtered_df.groupby('tipoResiduo')['quantidadeGerada'].sum().sort_values(ascending=False).head(10).reset_index()
-fig_types = px.pie(waste_types, values='quantidadeGerada', names='tipoResiduo', hole=0.3,
+df_tipos_residuos = df_filtrado.groupby('tipoResiduo')['quantidadeGerada'].sum().sort_values(ascending=False).head(10).reset_index()
+fig_tipos = px.pie(df_tipos_residuos, values='quantidadeGerada', names='tipoResiduo', hole=0.3,
                    color_discrete_sequence=['#985698'])
-st.plotly_chart(fig_types, use_container_width=True)
+st.plotly_chart(fig_tipos, use_container_width=True)
 
 st.subheader("Dados Detalhados")
-st.dataframe(filtered_df)
+st.dataframe(df_filtrado)
 
 st.markdown("---")
 st.markdown("Fonte dos dados: Arquivo JSON local (residuos_solidos.json)")
