@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 from src.models.data import Data
 
-st.set_page_config(page_title="IBAMA Hazardous Waste Dashboard", page_icon="♻️", layout="wide")
+st.set_page_config(page_title="SafeWaste", page_icon="♻️", layout="wide")
 
 st.markdown("""
 <style>
