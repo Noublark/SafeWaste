@@ -38,11 +38,11 @@ class TelaColeta:
         ]
         
         for frame in frames:
-            if frame:
+            if frame is not None: 
                 frame.destroy()
                 
         for label in labels:
-            if label:
+            if label is not None:
                 label.destroy()
 
     def mostrar_tela_coleta(self, frame):
